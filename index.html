@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot น้ำบาดาล</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>AI Chatbot น้ำบาดาล</h1>
+        <p>เรียนรู้เรื่องน้ำบาดาลไปกับ AI ของเรา!</p>
+
+        <div class="auth-section">
+            <button id="loginBtn">เข้าสู่ระบบ</button>
+            <button id="registerBtn">ลงทะเบียน</button>
+            <div id="userInfo" style="display: none;">
+                <span id="loggedInUser"></span> | <button id="logoutBtn">ออกจากระบบ</button>
+            </div>
+        </div>
+
+        <div class="ranking-section">
+            <h2>ตารางอันดับผู้ใช้งาน</h2>
+            <ul id="rankingList">
+                <li>กำลังโหลดอันดับ...</li>
+            </ul>
+        </div>
+
+        <div class="chatbot-section" style="display: none;">
+            <div id="chatbox">
+                <div class="message bot">สวัสดีครับ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล</div>
+                <div class="message bot">กรุณาเข้าสู่ระบบ หรือลงทะเบียน เพื่อใช้งาน Chatbot และเล่นเกมสะสมแต้มครับ!</div>
+            </div>
+            <input type="text" id="chatInput" placeholder="พิมพ์ข้อความที่นี่...">
+            <button id="sendBtn">ส่ง</button>
+        </div>
+
+    </div>
+
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modalTitle">เข้าสู่ระบบ</h2>
+            <form id="authForm">
+                <input type="text" id="authUsername" placeholder="ชื่อผู้ใช้" required>
+                <input type="password" id="authPassword" placeholder="รหัสผ่าน" required>
+                <button type="submit" id="submitAuthBtn">เข้าสู่ระบบ</button>
+            </form>
+            <p id="authMessage" style="color: red; margin-top: 10px;"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

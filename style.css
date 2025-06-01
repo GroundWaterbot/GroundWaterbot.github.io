@@ -1,0 +1,260 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e0f2f7; /* สีฟ้าอ่อนๆ */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* จัดให้เริ่มต้นจากด้านบน */
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    margin-top: 50px; /* เว้นระยะห่างจากด้านบน */
+}
+
+h1 {
+    color: #00796b; /* สีเขียวอมฟ้า */
+    margin-bottom: 10px;
+}
+
+p {
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.auth-section button {
+    background-color: #26a69a; /* สีเขียวเทอร์ควอยซ์ */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.auth-section button:hover {
+    background-color: #00897b;
+}
+
+#userInfo {
+    margin-top: 15px;
+    font-size: 1.1em;
+    color: #333;
+}
+
+#logoutBtn {
+    background-color: #ef5350; /* สีแดง */
+}
+
+#logoutBtn:hover {
+    background-color: #d32f2f;
+}
+
+.ranking-section {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f1f8e9; /* สีเขียวอ่อนมาก */
+    border-radius: 10px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.ranking-section h2 {
+    color: #388e3c; /* สีเขียวเข้ม */
+    margin-bottom: 15px;
+}
+
+#rankingList {
+    list-style: none;
+    padding: 0;
+    max-height: 250px;
+    overflow-y: auto;
+    text-align: left;
+}
+
+#rankingList li {
+    background-color: #ffffff;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+}
+
+#rankingList li:nth-child(odd) {
+    background-color: #e0f2f7; /* สีฟ้าอ่อนสำหรับแถวคี่ */
+}
+
+/* Chatbot Section */
+.chatbot-section {
+    margin-top: 30px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+#chatbox {
+    height: 300px;
+    padding: 15px;
+    overflow-y: auto;
+    background-color: #e8f5e9; /* สีเขียวมิ้นต์อ่อนๆ */
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.message {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    max-width: 75%;
+    word-wrap: break-word;
+}
+
+.message.user {
+    background-color: #bbdefb; /* สีฟ้าอ่อนสำหรับผู้ใช้ */
+    color: #333;
+    margin-left: auto; /* ชิดขวา */
+    text-align: right;
+}
+
+.message.bot {
+    background-color: #c8e6c9; /* สีเขียวอ่อนสำหรับบอท */
+    color: #333;
+    margin-right: auto; /* ชิดซ้าย */
+    text-align: left;
+}
+
+#chatInput {
+    width: calc(100% - 80px);
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 10px 0;
+    box-sizing: border-box;
+}
+
+#sendBtn {
+    width: 70px;
+    padding: 10px;
+    background-color: #4CAF50; /* สีเขียวเข้ม */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+    vertical-align: middle;
+    transition: background-color 0.3s ease;
+}
+
+#sendBtn:hover {
+    background-color: #45a049;
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto; /* Center the modal vertically and horizontally */
+    padding: 30px;
+    border: 1px solid #888;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.close-button {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content h2 {
+    color: #00796b;
+    margin-bottom: 20px;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.modal-content button[type="submit"] {
+    background-color: #26a69a;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.modal-content button[type="submit"]:hover {
+    background-color: #00897b;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        margin-top: 20px;
+        padding: 20px;
+    }
+    .auth-section button {
+        margin: 5px;
+        padding: 8px 15px;
+    }
+    #chatInput {
+        width: calc(100% - 70px);
+    }
+    #sendBtn {
+        width: 60px;
+    }
+}
