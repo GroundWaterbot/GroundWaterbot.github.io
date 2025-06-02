@@ -215,7 +215,7 @@ async function checkQuizAnswer(answer) {
     let scoreChange = 0;
     if (chosenAnswer === currentQuizQuestion.correctAnswer) {
         scoreChange = 10;
-        messageToDisplay = `ยอดเยี่ยม! คุณตอบถูกคะ! (+${scoreChange} แต้ม)`;
+        messageToDisplay = `เก่งมากเลย! คุณตอบถูกคะ! (+${scoreChange} แต้ม)`;
     } else {
         scoreChange = -5;
         messageToDisplay = `เสียใจด้วยค่ะ! คุณตอบผิด คำตอบที่ถูกต้องคือ "${currentQuizQuestion.correctAnswer}" (${scoreChange} แต้ม)`;
@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // โหลดข่าวสารเมื่อเข้าสู่ระบบอัตโนมัติ
         fetchData('getNews').then(res => {
             if (res.success && res.news) {
-                appendMessage('bot', `ผมมีข่าวสารประจำวันมาให้คุณฟังค่ะ: ${res.news}`);
+                appendMessage('bot', `บาดาลมีข่าวสารประจำวันมาให้คุณฟังค่ะ: ${res.news}`);
             } else {
                 appendMessage('bot', 'ไม่สามารถโหลดข่าวได้ในขณะนี้');
             }
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     } else {
         updateUIForLoginStatus(false);
-        appendMessage('bot', 'สวัสดีครับ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล');
+        appendMessage('bot', 'สวัสดีค่ะ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล');
         appendMessage('bot', 'กรุณาเข้าสู่ระบบ หรือลงทะเบียน เพื่อใช้งาน Chatbot และเล่นเกมสะสมแต้มค่ะ!');
     }
     
@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 updateUIForLoginStatus(true, currentUser);
                 closeModal();
-                appendMessage('bot', `สวัสดีค่ะ ${currentUser}! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล ผมมีข่าวสารประจำวันมาให้คุณฟังค่ะ:`);
+                appendMessage('bot', `สวัสดีค่ะ ${currentUser}! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล บาดาลมีข่าวสารประจำวันมาให้คุณฟังค่ะ:`);
                 appendMessage('bot', await fetchData('getNews').then(res => res.news || 'ไม่สามารถโหลดข่าวได้ในขณะนี้'));
                 appendMessage('bot', 'คุณสามารถพิมพ์ "เล่นเกม" เพื่อเริ่มเล่นเกมตอบคำถามน้ำบาดาล และสะสมแต้มได้เลยค่ะ!');
             } else { // ลงทะเบียนสำเร็จ
@@ -355,7 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('quizAttemptsToday');
         updateUIForLoginStatus(false);
         appendMessage('bot', 'คุณได้ออกจากระบบแล้วค่ะ');
-        chatbox.innerHTML = '<div class="message bot">สวัสดีครับ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล</div>'; // รีเซ็ต chatbox
+        chatbox.innerHTML = '<div class="message bot">สวัสดีค่ะ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล</div>'; // รีเซ็ต chatbox
     });
 
     // Initial welcome messages (moved to DOMContentLoaded based on login status)
