@@ -109,7 +109,7 @@ async function sendMessage() {
         return;
     }
 
-    appendMessage('bot', 'ตอนนี้ผมยังตอบคำถามทั่วไปไม่ได้ครับ ลองพิมพ์ "เล่นเกม" เพื่อเล่นเกมน้ำบาดาลดูนะคะ');
+    appendMessage('bot', 'ตอนนี้ผมยังตอบคำถามทั่วไปไม่ได้ค่ะ ลองพิมพ์ "เล่นเกม" เพื่อเล่นเกมน้ำบาดาลดูนะคะ');
 }
 
 let currentQuizQuestion = null;
