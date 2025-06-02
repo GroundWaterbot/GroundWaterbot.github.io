@@ -1,4 +1,15 @@
-const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby92JTVXwF2GTE6h_DBgtSZZYpBcGsILzsYvRBj9EPx2JKE2qNO0A1fUKGbgJiOzw8/exec'; // URL ของคุณ
+// ---- เพิ่มฟังก์ชัน hashPassword ไว้ด้านบนสุด ----
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+}
+// ---- จบฟังก์ชัน hashPassword ----
+
+const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby92JTVXwF2GTE6h_DBgtSZZYpBcGsILzsYvRBj9EPx2JKE2qNO0A1fUKGbgJiOzw8/exec';
 const QUIZ_ATTEMPTS_PER_DAY = 3;
 
 // --- DOM Elements ---
@@ -26,7 +37,6 @@ let currentUserScore = 0;
 let quizAttemptsToday = 0;
 
 // --- Helper Functions ---
-
 function appendMessage(sender, text) {
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message', sender);
