@@ -9,6 +9,7 @@ async function hashPassword(password) {
 }
 // ---- จบฟังก์ชัน hashPassword ----
 
+// ตรวจสอบให้แน่ใจว่า URL นี้เป็น URL ของ Google Apps Script Web App ล่าสุดที่คุณ Deploy แล้ว (และอนุมัติสิทธิ์ครบถ้วน)
 const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby92JTVXwF2GTE6h_DBgtSZZYpBcGsILzsYvRBj9EPx2JKE2qNO0A1fUKGbgJiOzw8/exec';
 const QUIZ_ATTEMPTS_PER_DAY = 3;
 
@@ -45,14 +46,33 @@ function appendMessage(sender, text) {
     chatbox.scrollTop = chatbox.scrollHeight;
 }
 
-async function fetchData(action, params = {}) {
+// *** ปรับปรุง fetchData ให้รองรับ POST method และ body ***
+async function fetchData(action, params = {}, method = 'GET') {
     const url = new URL(APPS_SCRIPT_WEB_APP_URL);
-    url.searchParams.append('action', action);
-    for (const key in params) {
-        url.searchParams.append(key, params[key]);
+    let body = null;
+
+    if (method === 'GET') {
+        url.searchParams.append('action', action);
+        for (const key in params) {
+            url.searchParams.append(key, params[key]);
+        }
+    } else if (method === 'POST') {
+        body = new URLSearchParams();
+        body.append('action', action);
+        for (const key in params) {
+            body.append(key, params[key]);
+        }
     }
+
     try {
-        const response = await fetch(url.toString(), { method: 'GET' });
+        const fetchOptions = { method: method };
+        if (method === 'POST') {
+            fetchOptions.headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+            fetchOptions.body = body;
+        }
+
+        const response = await fetch(url.toString(), fetchOptions); // ส่ง url.toString() เพื่อให้ถูกต้อง
+        
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
@@ -69,12 +89,14 @@ function updateUIForLoginStatus(isLoggedIn, username = '') {
     if (isLoggedIn) {
         loginBtn.style.display = 'none';
         registerBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block'; // แสดงปุ่ม logout
         userInfo.style.display = 'inline-block';
         loggedInUserSpan.textContent = `ยินดีต้อนรับ, ${username}! (คะแนน: ${currentUserScore})`;
         chatbotSection.style.display = 'block';
     } else {
         loginBtn.style.display = 'inline-block';
         registerBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none'; // ซ่อนปุ่ม logout
         userInfo.style.display = 'none';
         loggedInUserSpan.textContent = '';
         chatbotSection.style.display = 'none';
@@ -84,7 +106,7 @@ function updateUIForLoginStatus(isLoggedIn, username = '') {
 
 async function updateRanking() {
     rankingList.innerHTML = '<li>กำลังโหลดอันดับ...</li>';
-    const result = await fetchData('getRanking');
+    const result = await fetchData('getRanking'); // getRanking เป็น GET request
     if (result.success) {
         rankingList.innerHTML = '';
         result.ranking.forEach((user, index) => {
@@ -97,19 +119,62 @@ async function updateRanking() {
     }
 }
 
+// *** ปรับปรุง sendMessage เพื่อส่งข้อความไป Apps Script และรอคำตอบจาก Dialogflow ***
 async function sendMessage() {
     const message = chatInput.value.trim();
     if (!message) return;
 
+    if (!currentUser) { // ตรวจสอบว่าล็อกอินแล้วหรือยัง
+        appendMessage('bot', 'คุณต้องเข้าสู่ระบบก่อนจึงจะคุยกับ Chatbot ได้ค่ะ');
+        chatInput.value = '';
+        return;
+    }
+
     appendMessage('user', message);
     chatInput.value = '';
 
+    // Check if it's a quiz command before sending to Dialogflow
     if (message.toLowerCase() === 'เล่นเกม') {
         await startQuiz();
         return;
     }
+    
+    // Check if it's an answer to a quiz question
+    if (currentQuizQuestion) {
+        await checkQuizAnswer(message);
+        return;
+    }
 
-    appendMessage('bot', 'ตอนนี้ผมยังตอบคำถามทั่วไปไม่ได้ค่ะ ลองพิมพ์ "เล่นเกม" เพื่อเล่นเกมน้ำบาดาลดูนะคะ');
+    // แสดงสถานะกำลังพิมพ์...
+    const thinkingMessageDiv = document.createElement('div');
+    thinkingMessageDiv.classList.add('message', 'bot');
+    thinkingMessageDiv.textContent = 'กำลังพิมพ์...';
+    chatbox.appendChild(thinkingMessageDiv);
+    chatbox.scrollTop = chatbox.scrollHeight;
+
+    try {
+        const result = await fetchData('sendMessage', { 
+            username: currentUser, // ส่ง username ไปด้วยสำหรับ session ID ใน Dialogflow
+            user_content: message 
+        }, 'POST'); // sendMessage เป็น POST request
+
+        // ลบสถานะกำลังพิมพ์...
+        if (thinkingMessageDiv.parentNode) {
+            thinkingMessageDiv.remove();
+        }
+
+        if (result.success) {
+            appendMessage('bot', result.message); // คำตอบจาก Dialogflow
+        } else {
+            appendMessage('bot', `บอทตอบกลับผิดพลาด: ${result.message}`);
+        }
+    } catch (error) {
+        console.error("Error sending message to chatbot:", error);
+        if (thinkingMessageDiv.parentNode) {
+            thinkingMessageDiv.remove();
+        }
+        appendMessage('bot', "เกิดข้อผิดพลาดในการเชื่อมต่อกับบอท");
+    }
 }
 
 let currentQuizQuestion = null;
@@ -124,7 +189,7 @@ async function startQuiz() {
         return;
     }
     appendMessage('bot', 'มาเล่นเกมตอบคำถามน้ำบาดาลกัน! โปรดรอสักครู่...');
-    const result = await fetchData('getQuizQuestion');
+    const result = await fetchData('getQuizQuestion'); // getQuizQuestion เป็น GET request
     if (result.success) {
         currentQuizQuestion = result;
         const optionsHtml = result.options.map((opt, index) => `${index + 1}. ${opt}`).join('<br>');
@@ -160,7 +225,7 @@ async function checkQuizAnswer(answer) {
     const updateResult = await fetchData('updateScore', {
         username: currentUser,
         scoreIncrease: scoreChange
-    });
+    }, 'POST'); // updateScore เป็น POST request
 
     if (updateResult.success) {
         currentUserScore = updateResult.newScore;
@@ -177,23 +242,43 @@ async function checkQuizAnswer(answer) {
 
 // --- Event Listeners ---
 document.addEventListener('DOMContentLoaded', () => {
-    updateUIForLoginStatus(false);
-    updateRanking();
+    // โหลดสถานะผู้ใช้จาก Local Storage (ถ้ามี)
+    const storedUser = localStorage.getItem('currentUser');
+    const storedScore = localStorage.getItem('currentUserScore');
+    const storedQuizAttempts = localStorage.getItem('quizAttemptsToday');
+    
+    if (storedUser) {
+        currentUser = storedUser;
+        currentUserScore = parseInt(storedScore) || 0;
+        quizAttemptsToday = parseInt(storedQuizAttempts) || 0;
+        updateUIForLoginStatus(true, currentUser);
+        appendMessage('bot', `สวัสดีค่ะ ${currentUser}! ยินดีต้อนรับกลับสู่ AI Chatbot น้ำบาดาล`);
+        appendMessage('bot', `ตอนนี้คุณมี ${currentUserScore} แต้ม (ตอบไปแล้ว ${quizAttemptsToday} ครั้ง / ${QUIZ_ATTEMPTS_PER_DAY} ครั้งต่อวัน)`);
+        
+        // โหลดข่าวสารเมื่อเข้าสู่ระบบอัตโนมัติ
+        fetchData('getNews').then(res => {
+            if (res.success && res.news) {
+                appendMessage('bot', `ผมมีข่าวสารประจำวันมาให้คุณฟังค่ะ: ${res.news}`);
+            } else {
+                appendMessage('bot', 'ไม่สามารถโหลดข่าวได้ในขณะนี้');
+            }
+            appendMessage('bot', 'คุณสามารถพิมพ์ "เล่นเกม" เพื่อเริ่มเล่นเกมตอบคำถามน้ำบาดาล และสะสมแต้มได้เลยค่ะ!');
+        });
+    } else {
+        updateUIForLoginStatus(false);
+        appendMessage('bot', 'สวัสดีครับ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล');
+        appendMessage('bot', 'กรุณาเข้าสู่ระบบ หรือลงทะเบียน เพื่อใช้งาน Chatbot และเล่นเกมสะสมแต้มค่ะ!');
+    }
+    
+    updateRanking(); // โหลดอันดับเมื่อหน้าเว็บโหลดเสร็จ
 
     sendBtn.addEventListener('click', () => {
-        if (currentQuizQuestion) {
-            checkQuizAnswer(chatInput.value.trim());
-        } else {
-            sendMessage();
-        }
+        // sendMessage function will handle quiz answers if currentQuizQuestion is set
+        sendMessage();
     });
     chatInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            if (currentQuizQuestion) {
-                checkQuizAnswer(chatInput.value.trim());
-            } else {
-                sendMessage();
-            }
+            sendMessage();
         }
     });
 
@@ -227,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Hash password ก่อนส่ง
         const passwordHash = await hashPassword(password);
 
-        const result = await fetchData(formAction, { username, password: passwordHash });
+        const result = await fetchData(formAction, { username, password: passwordHash }, 'POST'); // login/register เป็น POST request
 
         if (result.success) {
             authMessage.style.color = 'green';
@@ -236,18 +321,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentUser = username;
                 currentUserScore = result.score;
                 quizAttemptsToday = result.quizAttemptsToday || 0;
+
+                // บันทึกสถานะการล็อกอินลง Local Storage
+                localStorage.setItem('currentUser', currentUser);
+                localStorage.setItem('currentUserScore', currentUserScore);
+                localStorage.setItem('quizAttemptsToday', quizAttemptsToday);
+
                 updateUIForLoginStatus(true, currentUser);
                 closeModal();
                 appendMessage('bot', `สวัสดีค่ะ ${currentUser}! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล ผมมีข่าวสารประจำวันมาให้คุณฟังค่ะ:`);
                 appendMessage('bot', await fetchData('getNews').then(res => res.news || 'ไม่สามารถโหลดข่าวได้ในขณะนี้'));
                 appendMessage('bot', 'คุณสามารถพิมพ์ "เล่นเกม" เพื่อเริ่มเล่นเกมตอบคำถามน้ำบาดาล และสะสมแต้มได้เลยค่ะ!');
-            } else {
+            } else { // ลงทะเบียนสำเร็จ
                 setTimeout(() => {
                     modalTitle.textContent = 'เข้าสู่ระบบ';
                     submitAuthBtn.textContent = 'เข้าสู่ระบบ';
                     authMessage.textContent = '';
                     authForm.reset();
-                }, 1500);
+                }, 1500); // ให้ผู้ใช้เห็นข้อความสำเร็จแล้วเปลี่ยนเป็นหน้า Login
             }
         } else {
             authMessage.style.color = 'red';
@@ -259,15 +350,19 @@ document.addEventListener('DOMContentLoaded', () => {
         currentUser = null;
         currentUserScore = 0;
         quizAttemptsToday = 0;
+        localStorage.removeItem('currentUser'); // ลบข้อมูลจาก Local Storage
+        localStorage.removeItem('currentUserScore');
+        localStorage.removeItem('quizAttemptsToday');
         updateUIForLoginStatus(false);
         appendMessage('bot', 'คุณได้ออกจากระบบแล้วค่ะ');
-        chatbox.innerHTML = '<div class="message bot">สวัสดีครับ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล</div>';
+        chatbox.innerHTML = '<div class="message bot">สวัสดีครับ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล</div>'; // รีเซ็ต chatbox
     });
 
-    if (!currentUser) {
-        appendMessage('bot', 'สวัสดีครับ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล');
-        appendMessage('bot', 'กรุณาเข้าสู่ระบบ หรือลงทะเบียน เพื่อใช้งาน Chatbot และเล่นเกมสะสมแต้มค่ะ!');
-    }
+    // Initial welcome messages (moved to DOMContentLoaded based on login status)
+    // if (!currentUser) { // This part is now handled by the logic above
+    //     appendMessage('bot', 'สวัสดีครับ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล');
+    //     appendMessage('bot', 'กรุณาเข้าสู่ระบบ หรือลงทะเบียน เพื่อใช้งาน Chatbot และเล่นเกมสะสมแต้มค่ะ!');
+    // }
 });
 
 // --- Modal Functions ---

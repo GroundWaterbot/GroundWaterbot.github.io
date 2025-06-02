@@ -7,33 +7,34 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-    <h1>AI Chatbot น้ำบาดาล</h1>
-    <p>บาดาล Ai Chatbotตัวแทนของน้ำบาดาลคะ ! </p>
-
-    <div class="auth-section">
-        <button id="loginBtn">เข้าสู่ระบบ</button>
-        <button id="registerBtn">ลงทะเบียน</button>
-        <span id="userInfo" style="display: none;">
-            <span id="loggedInUser"></span> | 
-            <button id="logoutBtn">ออกจากระบบ</button>
-        </span>
-    </div>
-
-    <div class="ranking-section">
-        <h2>คะแนนผู้ใช้สูงสุด</h2>
-        <ul id="rankingList">
-            <li>กำลังโหลดอันดับ...</li>
-        </ul>
-    </div>
-
-    <div class="chatbot-section" style="display: none;">
-        <div id="chatbox">
-            <div class="message bot">สวัสดีคะ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล</div>
-            <div class="message bot">กรุณาเข้าสู่ระบบ หรือลงทะเบียน เพื่อใช้งาน Chatbot และเล่นเกมสะสมแต้มคะ!</div>
+    <div class="header">
+        <h1>AI Chatbot น้ำบาดาล</h1>
+        <div class="auth-buttons">
+            <button id="loginBtn">เข้าสู่ระบบ</button>
+            <button id="registerBtn">ลงทะเบียน</button>
+            <div id="userInfo" style="display: none;">
+                <span id="loggedInUser"></span> 
+                <button id="logoutBtn">ออกจากระบบ</button>
+            </div>
         </div>
-        <input type="text" id="chatInput" placeholder="พิมพ์ข้อความที่นี่...">
-        <button id="sendBtn">ส่ง</button>
+    </div>
+
+    <div class="main-container">
+        <div class="chatbot-section" style="display: none;">
+            <div id="chatbox" class="chatbox"> <div class="message bot">สวัสดีคะ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล</div>
+                <div class="message bot">กรุณาเข้าสู่ระบบ หรือลงทะเบียน เพื่อใช้งาน Chatbot และเล่นเกมสะสมแต้มคะ!</div>
+            </div>
+            <div class="chat-input-container"> <input type="text" id="chatInput" placeholder="พิมพ์ข้อความที่นี่...">
+                <button id="sendBtn">ส่ง</button>
+            </div>
+        </div>
+
+        <div class="ranking-section">
+            <h2>คะแนนผู้ใช้สูงสุด</h2>
+            <ul id="rankingList">
+                <li>กำลังโหลดอันดับ...</li>
+            </ul>
+        </div>
     </div>
 
     <div id="authModal" class="modal">
@@ -41,14 +42,16 @@
             <span class="close-button">&times;</span>
             <h2 id="modalTitle">เข้าสู่ระบบ</h2>
             <form id="authForm">
-                <input type="text" id="authUsername" placeholder="ชื่อผู้ใช้" required>
-                <input type="password" id="authPassword" placeholder="รหัสผ่าน" required>
+                <div class="input-group"> <label for="authUsername">ชื่อผู้ใช้:</label> <input type="text" id="authUsername" placeholder="ชื่อผู้ใช้" required>
+                </div>
+                <div class="input-group"> <label for="authPassword">รหัสผ่าน:</label> <input type="password" id="authPassword" placeholder="รหัสผ่าน" required>
+                </div>
+                <p id="authMessage" style="color: red; margin-top: 10px;"></p>
                 <button type="submit" id="submitAuthBtn">เข้าสู่ระบบ</button>
             </form>
-            <p id="authMessage" style="color: red; margin-top: 10px;"></p>
         </div>
     </div>
-</div>
-<script src="script.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>

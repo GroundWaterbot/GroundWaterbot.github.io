@@ -1,37 +1,38 @@
+/* General Body & HTML */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #e0f2f7; /* สีฟ้าอ่อนๆ */
     display: flex;
-    justify-content: center;
-    align-items: flex-start; /* จัดให้เริ่มต้นจากด้านบน */
+    flex-direction: column; /* เปลี่ยนเป็น column เพื่อให้ header และ main-container ซ้อนกันแนวตั้ง */
     min-height: 100vh;
     margin: 0;
-    padding: 20px;
+    padding: 0; /* ลบ padding ตรงนี้ เพราะจะใส่ในแต่ละส่วนแทน */
     box-sizing: border-box;
 }
 
-.container {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
-    text-align: center;
-    margin-top: 50px; /* เว้นระยะห่างจากด้านบน */
+/* --- Header Section (ใหม่) --- */
+.header {
+    background-color: #4CAF50; /* สีเขียวเข้มตามตัวอย่างก่อนหน้า */
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between; /* จัดให้ h1 ชิดซ้าย, auth-buttons ชิดขวา */
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-h1 {
-    color: #00796b; /* สีเขียวอมฟ้า */
-    margin-bottom: 10px;
+.header h1 {
+    margin: 0;
+    font-size: 24px;
 }
 
-p {
-    color: #555;
-    margin-bottom: 25px;
+.auth-buttons { /* เดิมคือ .auth-section แต่ตอนนี้อยู่ใน header และชื่อดีขึ้น */
+    display: flex; /* จัดปุ่มให้อยู่ในแนวนอน */
+    align-items: center;
+    gap: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
 }
 
-.auth-section button {
+.auth-buttons button {
     background-color: #26a69a; /* สีเขียวเทอร์ควอยซ์ */
     color: white;
     padding: 10px 20px;
@@ -39,18 +40,19 @@ p {
     border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
-    margin: 0 10px 20px;
     transition: background-color 0.3s ease;
 }
 
-.auth-section button:hover {
+.auth-buttons button:hover {
     background-color: #00897b;
 }
 
 #userInfo {
-    margin-top: 15px;
     font-size: 1.1em;
-    color: #333;
+    color: white; /* เปลี่ยนสีเพื่อให้เห็นบนพื้นหลังสีเขียว */
+    display: flex; /* เพื่อจัด logoutBtn ให้อยู่ข้างๆ */
+    align-items: center;
+    gap: 10px;
 }
 
 #logoutBtn {
@@ -61,23 +63,41 @@ p {
     background-color: #d32f2f;
 }
 
+/* --- Main Container (ใหม่) --- */
+.main-container {
+    display: flex;
+    flex-grow: 1; /* ให้ส่วนนี้ขยายเต็มพื้นที่ที่เหลือ */
+    padding: 20px; /* เพิ่ม padding ให้กับ main-container */
+    gap: 20px; /* ระยะห่างระหว่าง chatbot กับ ranking */
+    justify-content: center; /* จัดให้อยู่กึ่งกลางแนวนอน */
+    flex-wrap: wrap; /* ให้ห่อเมื่อหน้าจอเล็ก */
+    align-items: flex-start; /* จัดให้ส่วนประกอบเริ่มจากด้านบน */
+}
+
+/* Ranking Section */
 .ranking-section {
-    margin-top: 30px;
-    padding: 20px;
     background-color: #f1f8e9; /* สีเขียวอ่อนมาก */
     border-radius: 10px;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* ปรับ shadow ให้คล้ายกับ chatbot-section */
+    padding: 20px;
+    width: 100%;
+    max-width: 350px; /* กำหนด max-width สำหรับ ranking */
+    height: fit-content; /* ปรับความสูงตามเนื้อหา */
+    order: 2; /* ให้ Ranking อยู่ด้านขวา (ลำดับที่ 2) เมื่อจอใหญ่ */
 }
 
 .ranking-section h2 {
     color: #388e3c; /* สีเขียวเข้ม */
+    margin-top: 0; /* ลบ margin-top เดิม */
     margin-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0; /* เพิ่มเส้นแบ่ง */
+    padding-bottom: 10px;
 }
 
 #rankingList {
     list-style: none;
     padding: 0;
-    max-height: 250px;
+    max-height: 250px; /* ยังคงความสูงสูงสุด */
     overflow-y: auto;
     text-align: left;
 }
@@ -91,6 +111,7 @@ p {
     justify-content: space-between;
     align-items: center;
     border: 1px solid #e0e0e0;
+    color: #555; /* สีข้อความ */
 }
 
 #rankingList li:nth-child(odd) {
@@ -99,21 +120,27 @@ p {
 
 /* Chatbot Section */
 .chatbot-section {
-    margin-top: 30px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
+    background-color: #fff; /* ใช้สีขาวพื้นหลังหลัก */
+    border-radius: 12px; /* ใช้ border-radius เดียวกันกับ container เดิม */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* ใช้ shadow เดียวกัน */
+    width: 100%;
+    max-width: 600px; /* กำหนด max-width */
+    display: flex;
+    flex-direction: column; /* จัดองค์ประกอบภายในให้เป็นแนวตั้ง */
     overflow: hidden;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    height: 600px; /* กำหนดความสูงให้ Chatbot */
+    order: 1; /* ให้ Chatbot อยู่ด้านซ้าย (ลำดับที่ 1) เมื่อจอใหญ่ */
 }
 
-#chatbox {
-    height: 300px;
+.chatbox { /* #chatbox กลายเป็น .chatbox ใน index.html ล่าสุด */
+    flex-grow: 1;
     padding: 15px;
     overflow-y: auto;
     background-color: #e8f5e9; /* สีเขียวมิ้นต์อ่อนๆ */
     border-bottom: 1px solid #eee;
     text-align: left;
+    display: flex; /* เพิ่ม display flex เพื่อให้ message ชิดด้านข้าง */
+    flex-direction: column; /* จัดข้อความใน chatbox ให้เป็น column */
 }
 
 .message {
@@ -122,42 +149,55 @@ p {
     border-radius: 15px;
     max-width: 75%;
     word-wrap: break-word;
+    /* ลบ margin-left/right: auto ออกจากตรงนี้ เพราะจะใส่ใน .user และ .bot */
+    /* ลบ text-align ออกจากตรงนี้ */
 }
 
 .message.user {
     background-color: #bbdefb; /* สีฟ้าอ่อนสำหรับผู้ใช้ */
     color: #333;
-    margin-left: auto; /* ชิดขวา */
-    text-align: right;
+    align-self: flex-end; /* ชิดขวา */
+    border-bottom-right-radius: 5px; /* ปรับมุมโค้งเล็กน้อย */
 }
 
 .message.bot {
     background-color: #c8e6c9; /* สีเขียวอ่อนสำหรับบอท */
     color: #333;
-    margin-right: auto; /* ชิดซ้าย */
-    text-align: left;
+    align-self: flex-start; /* ชิดซ้าย */
+    border-bottom-left-radius: 5px; /* ปรับมุมโค้งเล็กน้อย */
+}
+
+/* --- Chat Input Container (ใหม่) --- */
+.chat-input-container {
+    display: flex; /* จัด input และ button ให้อยู่ในแนวนอน */
+    padding: 10px 15px; /* เพิ่ม padding */
+    background-color: #f9f9f9; /* สีพื้นหลัง */
+    border-top: 1px solid #eee; /* เส้นแบ่งด้านบน */
 }
 
 #chatInput {
-    width: calc(100% - 80px);
-    padding: 10px;
+    flex-grow: 1; /* ให้ input ขยายเต็มพื้นที่ที่เหลือ */
+    padding: 10px 15px; /* ปรับ padding */
     border: 1px solid #ddd;
-    border-radius: 5px;
-    margin: 10px 0;
+    border-radius: 20px; /* ปรับให้โค้งมากขึ้น */
+    margin: 0; /* ลบ margin เดิม */
     box-sizing: border-box;
+    font-size: 16px;
+    outline: none; /* ลบ outline เมื่อ focus */
 }
 
 #sendBtn {
-    width: 70px;
-    padding: 10px;
     background-color: #4CAF50; /* สีเขียวเข้ม */
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 20px; /* ปรับให้โค้งมากขึ้น */
+    padding: 10px 20px; /* ปรับ padding */
+    margin-left: 10px; /* ระยะห่างจาก input */
     cursor: pointer;
-    margin-left: 5px;
-    vertical-align: middle;
+    font-size: 16px;
     transition: background-color 0.3s ease;
+    width: auto; /* ลบ width เดิม */
+    vertical-align: middle; /* อันนี้อาจจะไม่จำเป็นแล้วเมื่อใช้ flex */
 }
 
 #sendBtn:hover {
@@ -175,13 +215,13 @@ p {
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    display: flex; /* ใช้ flex เพื่อ center modal */
     justify-content: center;
     align-items: center;
 }
 
 .modal-content {
     background-color: #fefefe;
-    margin: auto; /* Center the modal vertically and horizontally */
     padding: 30px;
     border: 1px solid #888;
     border-radius: 10px;
@@ -214,15 +254,28 @@ p {
     margin-bottom: 20px;
 }
 
+/* --- Input Group in Modal (ใหม่) --- */
+.input-group {
+    margin-bottom: 15px;
+    text-align: left; /* จัดให้อักษรชิดซ้าย */
+}
+
+.input-group label {
+    display: block; /* ทำให้ label ขึ้นบรรทัดใหม่ */
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: bold;
+}
+
 .modal-content input[type="text"],
 .modal-content input[type="password"] {
-    width: calc(100% - 20px);
+    width: calc(100% - 22px); /* ลบ padding 2 ข้างและ border 2 ข้าง */
     padding: 12px;
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; -- ย้ายไปที่ .input-group */
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 16px;
-    box-sizing: border-box; /* Include padding in width */
+    box-sizing: border-box;
 }
 
 .modal-content button[type="submit"] {
@@ -234,6 +287,7 @@ p {
     cursor: pointer;
     font-size: 18px;
     width: 100%;
+    margin-top: 20px; /* เพิ่มระยะห่างด้านบน */
     transition: background-color 0.3s ease;
 }
 
@@ -241,20 +295,57 @@ p {
     background-color: #00897b;
 }
 
+#authMessage { /* สไตล์สำหรับ p id="authMessage" */
+    margin-top: 15px;
+    font-weight: bold;
+    color: red; /* สามารถเปลี่ยนสีได้ตามสถานะ */
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .container {
-        margin-top: 20px;
-        padding: 20px;
+    .main-container {
+        flex-direction: column; /* จัดให้ chatbot และ ranking ซ้อนกันแนวตั้ง */
+        align-items: center; /* จัดให้อยู่กึ่งกลางแนวนอน */
+        padding: 10px;
     }
-    .auth-section button {
-        margin: 5px;
-        padding: 8px 15px;
+
+    .header {
+        flex-direction: column; /* จัดให้ header เป็นแนวตั้งเมื่อจอเล็ก */
+        gap: 10px;
+        padding: 10px;
     }
+
+    .auth-buttons {
+        flex-wrap: wrap; /* ให้ปุ่มห่อเมื่อจอเล็ก */
+        justify-content: center;
+    }
+
+    .chatbot-section, .ranking-section {
+        max-width: 95%; /* ใช้พื้นที่มากขึ้นบนจอเล็ก */
+        margin-bottom: 20px;
+        height: auto; /* ให้ chatbot ปรับความสูงตามเนื้อหา */
+    }
+
+    .chatbox {
+        height: 400px; /* เพิ่มความสูงของ chatbox บนจอเล็ก */
+    }
+
+    .chat-input-container {
+        flex-direction: column; /* ให้ input และ button ซ้อนกัน */
+        gap: 10px;
+    }
+
     #chatInput {
-        width: calc(100% - 70px);
+        width: 100%; /* input เต็มความกว้าง */
+        margin: 0;
     }
+
     #sendBtn {
-        width: 60px;
+        width: 100%; /* button เต็มความกว้าง */
+        margin-left: 0;
+    }
+
+    .modal-content {
+        padding: 20px;
     }
 }
