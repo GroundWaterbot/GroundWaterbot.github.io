@@ -109,18 +109,18 @@ async function sendMessage() {
         return;
     }
 
-    appendMessage('bot', 'ตอนนี้ผมยังตอบคำถามทั่วไปไม่ได้ครับ ลองพิมพ์ "เล่นเกม" เพื่อเล่นเกมน้ำบาดาลดูนะครับ');
+    appendMessage('bot', 'ตอนนี้ผมยังตอบคำถามทั่วไปไม่ได้ครับ ลองพิมพ์ "เล่นเกม" เพื่อเล่นเกมน้ำบาดาลดูนะคะ');
 }
 
 let currentQuizQuestion = null;
 
 async function startQuiz() {
     if (!currentUser) {
-        appendMessage('bot', 'คุณต้องเข้าสู่ระบบก่อนจึงจะเล่นเกมได้ครับ');
+        appendMessage('bot', 'คุณต้องเข้าสู่ระบบก่อนจึงจะเล่นเกมได้ค่ะ');
         return;
     }
     if (quizAttemptsToday >= QUIZ_ATTEMPTS_PER_DAY) {
-        appendMessage('bot', `วันนี้คุณตอบคำถามครบ ${QUIZ_ATTEMPTS_PER_DAY} ครั้งแล้วครับ ลองมาใหม่พรุ่งนี้นะ!`);
+        appendMessage('bot', `วันนี้คุณตอบคำถามครบ ${QUIZ_ATTEMPTS_PER_DAY} ครั้งแล้ว ลองมาใหม่พรุ่งนี้นะ!`);
         return;
     }
     appendMessage('bot', 'มาเล่นเกมตอบคำถามน้ำบาดาลกัน! โปรดรอสักครู่...');
@@ -137,7 +137,7 @@ async function startQuiz() {
 
 async function checkQuizAnswer(answer) {
     if (!currentQuizQuestion) {
-        appendMessage('bot', 'ไม่มีคำถามที่กำลังรอคำตอบอยู่ครับ');
+        appendMessage('bot', 'ไม่มีคำถามที่กำลังรอคำตอบอยู่ค่ะ');
         return;
     }
     const userAnswerIndex = parseInt(answer) - 1;
@@ -150,10 +150,10 @@ async function checkQuizAnswer(answer) {
     let scoreChange = 0;
     if (chosenAnswer === currentQuizQuestion.correctAnswer) {
         scoreChange = 10;
-        messageToDisplay = `ยอดเยี่ยม! คุณตอบถูกครับ! (+${scoreChange} แต้ม)`;
+        messageToDisplay = `ยอดเยี่ยม! คุณตอบถูกคะ! (+${scoreChange} แต้ม)`;
     } else {
         scoreChange = -5;
-        messageToDisplay = `เสียใจด้วยครับ! คุณตอบผิด คำตอบที่ถูกต้องคือ "${currentQuizQuestion.correctAnswer}" (${scoreChange} แต้ม)`;
+        messageToDisplay = `เสียใจด้วยค่ะ! คุณตอบผิด คำตอบที่ถูกต้องคือ "${currentQuizQuestion.correctAnswer}" (${scoreChange} แต้ม)`;
     }
     appendMessage('bot', messageToDisplay);
 
@@ -238,9 +238,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 quizAttemptsToday = result.quizAttemptsToday || 0;
                 updateUIForLoginStatus(true, currentUser);
                 closeModal();
-                appendMessage('bot', `สวัสดีครับ ${currentUser}! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล ผมมีข่าวสารประจำวันมาให้คุณฟังครับ:`);
+                appendMessage('bot', `สวัสดีค่ะ ${currentUser}! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล ผมมีข่าวสารประจำวันมาให้คุณฟังค่ะ:`);
                 appendMessage('bot', await fetchData('getNews').then(res => res.news || 'ไม่สามารถโหลดข่าวได้ในขณะนี้'));
-                appendMessage('bot', 'คุณสามารถพิมพ์ "เล่นเกม" เพื่อเริ่มเล่นเกมตอบคำถามน้ำบาดาล และสะสมแต้มได้เลยครับ!');
+                appendMessage('bot', 'คุณสามารถพิมพ์ "เล่นเกม" เพื่อเริ่มเล่นเกมตอบคำถามน้ำบาดาล และสะสมแต้มได้เลยค่ะ!');
             } else {
                 setTimeout(() => {
                     modalTitle.textContent = 'เข้าสู่ระบบ';
@@ -260,13 +260,13 @@ document.addEventListener('DOMContentLoaded', () => {
         currentUserScore = 0;
         quizAttemptsToday = 0;
         updateUIForLoginStatus(false);
-        appendMessage('bot', 'คุณได้ออกจากระบบแล้วครับ');
+        appendMessage('bot', 'คุณได้ออกจากระบบแล้วค่ะ');
         chatbox.innerHTML = '<div class="message bot">สวัสดีครับ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล</div>';
     });
 
     if (!currentUser) {
         appendMessage('bot', 'สวัสดีครับ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล');
-        appendMessage('bot', 'กรุณาเข้าสู่ระบบ หรือลงทะเบียน เพื่อใช้งาน Chatbot และเล่นเกมสะสมแต้มครับ!');
+        appendMessage('bot', 'กรุณาเข้าสู่ระบบ หรือลงทะเบียน เพื่อใช้งาน Chatbot และเล่นเกมสะสมแต้มค่ะ!');
     }
 });
 
