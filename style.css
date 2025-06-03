@@ -6,7 +6,7 @@ body {
     flex-direction: column; /* จัดองค์ประกอบหลักให้เป็นแนวตั้ง */
     min-height: 100vh;
     margin: 0;
-    padding: 0; /* ลบ padding ตรงนี้ เพราะจะใส่ในแต่ละส่วนแทน */
+    padding: 0;
     box-sizing: border-box;
 }
 
@@ -74,28 +74,28 @@ body {
     align-items: flex-start; /* จัดให้ส่วนประกอบเริ่มจากด้านบน */
 }
 
-/* Chatbot Section */
+/* --- Chatbot Section (แก้ไขหลัก) --- */
 .chatbot-section {
-    background-color: #fff; /* ใช้สีขาวพื้นหลังหลัก */
+    background-color: #fff;
     border-radius: 12px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 600px; /* กำหนด max-width */
+    max-width: 600px;
     display: flex;
-    flex-direction: column; /* จัดองค์ประกอบภายในให้เป็นแนวตั้ง */
-    overflow: hidden; /* สำคัญ: เพื่อไม่ให้ scrollbar ของ chatbox โผล่ออกมานอกขอบ */
-    height: 600px; /* กำหนดความสูงให้ Chatbot */
-    order: 1; /* ให้ Chatbot อยู่ด้านซ้าย (ลำดับที่ 1) เมื่อจอใหญ่ */
+    flex-direction: column; /* ทำให้ chatbox และ input container ซ้อนกัน */
+    /* overflow: hidden; */ /* ลบออกเพื่อให้ scrollbar ของ chatbox โผล่ได้เต็มที่ */
+    height: 600px; /* กำหนดความสูงรวมของ chatbot-section */
+    order: 1;
 }
 
-.chatbox { /* .chatbox ไม่ใช่ #chatbox */
-    flex-grow: 1; /* ให้ chatbox ขยายเต็มพื้นที่ที่เหลือใน chatbot-section */
+.chatbox {
+    flex-grow: 1; /* สำคัญ: ทำให้ chatbox ขยายเต็มพื้นที่ที่เหลือใน chatbot-section */
     padding: 15px;
     overflow-y: auto; /* สำคัญ: ทำให้เกิด scrollbar เมื่อข้อความเกิน */
-    background-color: #e8f5e9; /* สีเขียวมิ้นต์อ่อนๆ */
+    background-color: #e8f5e9;
     border-bottom: 1px solid #eee;
-    display: flex; /* เพื่อให้ message ชิดด้านข้าง */
-    flex-direction: column; /* จัดข้อความใน chatbox ให้เป็น column */
+    display: flex;
+    flex-direction: column;
 }
 
 .message {
@@ -107,78 +107,79 @@ body {
 }
 
 .message.user {
-    background-color: #bbdefb; /* สีฟ้าอ่อนสำหรับผู้ใช้ */
+    background-color: #bbdefb;
     color: #333;
     align-self: flex-end; /* ชิดขวา */
-    border-bottom-right-radius: 5px; /* ปรับมุมโค้งเล็กน้อย */
+    border-bottom-right-radius: 5px;
 }
 
 .message.bot {
-    background-color: #c8e6c9; /* สีเขียวอ่อนสำหรับบอท */
+    background-color: #c8e6c9;
     color: #333;
     align-self: flex-start; /* ชิดซ้าย */
-    border-bottom-left-radius: 5px; /* ปรับมุมโค้งเล็กน้อย */
+    border-bottom-left-radius: 5px;
 }
 
-/* --- Chat Input Container (ใหม่) --- */
 .chat-input-container {
     display: flex; /* จัด input และ button ให้อยู่ในแนวนอน */
-    padding: 10px 15px; /* เพิ่ม padding */
-    background-color: #f9f9f9; /* สีพื้นหลัง */
-    border-top: 1px solid #eee; /* เส้นแบ่งด้านบน */
+    padding: 10px 15px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eee;
+    flex-shrink: 0; /* สำคัญ: ป้องกันไม่ให้ container นี้ถูกบีบ */
 }
 
 #chatInput {
     flex-grow: 1; /* ให้ input ขยายเต็มพื้นที่ที่เหลือ */
-    padding: 10px 15px; /* ปรับ padding */
+    padding: 10px 15px;
     border: 1px solid #ddd;
-    border-radius: 20px; /* ปรับให้โค้งมากขึ้น */
-    margin: 0; /* ลบ margin เดิม */
+    border-radius: 20px;
+    margin: 0;
     box-sizing: border-box;
     font-size: 16px;
-    outline: none; /* ลบ outline เมื่อ focus */
+    outline: none;
 }
 
 #sendBtn {
-    background-color: #4CAF50; /* สีเขียวเข้ม */
+    background-color: #4CAF50;
     color: white;
     border: none;
-    border-radius: 20px; /* ปรับให้โค้งมากขึ้น */
-    padding: 10px 20px; /* ปรับ padding */
-    margin-left: 10px; /* ระยะห่างจาก input */
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin-left: 10px;
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
+    flex-shrink: 0; /* สำคัญ: ป้องกันไม่ให้ button ถูกบีบ */
 }
 
 #sendBtn:hover {
     background-color: #45a049;
 }
 
-/* Ranking Section */
+/* --- Ranking Section --- */
 .ranking-section {
-    background-color: #f1f8e9; /* สีเขียวอ่อนมาก */
+    background-color: #f1f8e9;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* ปรับ shadow ให้คล้ายกับ chatbot-section */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     width: 100%;
-    max-width: 350px; /* กำหนด max-width สำหรับ ranking */
-    height: fit-content; /* ปรับความสูงตามเนื้อหา */
-    order: 2; /* ให้ Ranking อยู่ด้านขวา (ลำดับที่ 2) เมื่อจอใหญ่ */
+    max-width: 350px;
+    height: fit-content;
+    order: 2;
 }
 
 .ranking-section h2 {
-    color: #388e3c; /* สีเขียวเข้ม */
-    margin-top: 0; /* ลบ margin-top เดิม */
+    color: #388e3c;
+    margin-top: 0;
     margin-bottom: 15px;
-    border-bottom: 1px solid #e0e0e0; /* เพิ่มเส้นแบ่ง */
+    border-bottom: 1px solid #e0e0e0;
     padding-bottom: 10px;
 }
 
 #rankingList {
     list-style: none;
     padding: 0;
-    max-height: 250px; /* ยังคงความสูงสูงสุด */
+    max-height: 250px;
     overflow-y: auto; /* ทำให้เกิด scrollbar เมื่อข้อความเกิน */
     text-align: left;
 }
@@ -192,24 +193,24 @@ body {
     justify-content: space-between;
     align-items: center;
     border: 1px solid #e0e0e0;
-    color: #555; /* สีข้อความ */
+    color: #555;
 }
 
 #rankingList li:nth-child(odd) {
-    background-color: #e0f2f7; /* สีฟ้าอ่อนสำหรับแถวคี่ */
+    background-color: #e0f2f7;
 }
 
-/* Modal Styles */
+/* --- Modal Styles --- */
 .modal {
     /* display: none; */ /* จะถูกจัดการด้วย JS */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
+    position: fixed;
+    z-index: 1000;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
     display: flex; /* ใช้ flex เพื่อ center modal (จะถูกเปลี่ยนเป็น none/flex ด้วย JS) */
     justify-content: center;
     align-items: center;
@@ -252,11 +253,11 @@ body {
 /* Input Group in Modal */
 .input-group {
     margin-bottom: 15px;
-    text-align: left; /* จัดให้อักษรชิดซ้าย */
+    text-align: left;
 }
 
 .input-group label {
-    display: block; /* ทำให้ label ขึ้นบรรทัดใหม่ */
+    display: block;
     margin-bottom: 5px;
     color: #555;
     font-weight: bold;
@@ -264,7 +265,7 @@ body {
 
 .modal-content input[type="text"],
 .modal-content input[type="password"] {
-    width: calc(100% - 22px); /* ลบ padding 2 ข้างและ border 2 ข้าง */
+    width: calc(100% - 22px);
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 6px;
@@ -281,7 +282,7 @@ body {
     cursor: pointer;
     font-size: 18px;
     width: 100%;
-    margin-top: 20px; /* เพิ่มระยะห่างด้านบน */
+    margin-top: 20px;
     transition: background-color 0.3s ease;
 }
 
@@ -289,53 +290,54 @@ body {
     background-color: #00897b;
 }
 
-#authMessage { /* สไตล์สำหรับ p id="authMessage" */
+#authMessage {
     margin-top: 15px;
     font-weight: bold;
-    color: red; /* สามารถเปลี่ยนสีได้ตามสถานะ */
+    color: red;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .main-container {
-        flex-direction: column; /* จัดให้ chatbot และ ranking ซ้อนกันแนวตั้ง */
-        align-items: center; /* จัดให้อยู่กึ่งกลางแนวนอน */
+        flex-direction: column;
+        align-items: center;
         padding: 10px;
     }
 
     .header {
-        flex-direction: column; /* จัดให้ header เป็นแนวตั้งเมื่อจอเล็ก */
+        flex-direction: column;
         gap: 10px;
         padding: 10px;
     }
 
     .auth-buttons {
-        flex-wrap: wrap; /* ให้ปุ่มห่อเมื่อจอเล็ก */
+        flex-wrap: wrap;
         justify-content: center;
     }
 
     .chatbot-section, .ranking-section {
-        max-width: 95%; /* ใช้พื้นที่มากขึ้นบนจอเล็ก */
+        max-width: 95%;
         margin-bottom: 20px;
-        height: auto; /* ให้ chatbot ปรับความสูงตามเนื้อหา */
+        height: auto; /* ปรับให้ความสูงของ chatbot-section ยืดหดตามเนื้อหาเมื่อจอเล็ก */
     }
 
     .chatbox {
-        height: 400px; /* เพิ่มความสูงของ chatbox บนจอเล็ก */
+        height: 400px; /* กำหนดความสูงเฉพาะ chatbox บนจอเล็ก */
     }
 
     .chat-input-container {
-        flex-direction: column; /* ให้ input และ button ซ้อนกัน */
+        flex-direction: column;
         gap: 10px;
+        padding: 10px; /* ปรับ padding บนมือถือ */
     }
 
     #chatInput {
-        width: 100%; /* input เต็มความกว้าง */
+        width: 100%;
         margin: 0;
     }
 
     #sendBtn {
-        width: 100%; /* button เต็มความกว้าง */
+        width: 100%;
         margin-left: 0;
     }
 
