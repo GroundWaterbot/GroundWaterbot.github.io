@@ -1,14 +1,13 @@
 /* General Body & HTML */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #e0f2f7; /* สีฟ้าอ่อนๆ */
+    background-color: #e0f2f7;
     display: flex;
-    flex-direction: column; /* จัดองค์ประกอบหลักให้เป็นแนวตั้ง */
-    min-height: 100vh; /* ให้ body สูงอย่างน้อยเต็มหน้าจอ */
+    flex-direction: column;
+    min-height: 100vh;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* ไม่ใส่ height: 100vh; และ overflow: hidden; ที่ body */
 }
 
 /* --- Header Section --- */
@@ -74,7 +73,6 @@ body {
     justify-content: center;
     flex-wrap: wrap;
     align-items: flex-start;
-    /* ไม่ต้องใส่ overflow-y: auto; */
 }
 
 /* --- Chatbot Section --- */
@@ -88,20 +86,21 @@ body {
     flex-direction: column;
     height: 600px; /* ความสูงคงที่ */
     order: 1;
+    overflow: hidden; /* ป้องกัน child element เกินขอบ */
 }
 
 /* กล่องแชท (scroll ได้เฉพาะในนี้) */
 #chatbox, .chatbox {
-    flex-grow: 1;
+    flex: 1 1 0%;
     padding: 15px;
-    overflow-y: auto; /* สำคัญ: scroll ในกล่องนี้เท่านั้น */
+    overflow-y: auto; /* scroll ในกล่องนี้เท่านั้น */
     background-color: #e8f5e9;
     border-bottom: 1px solid #eee;
     display: flex;
     flex-direction: column;
     min-height: 0;
-    height: 0; /* fix สำหรับ flexbox */
     color: #333;
+    /* แก้ไขให้กล่องแชทแสดงได้เต็มพื้นที่ที่เหลือ */
 }
 
 .message {
@@ -332,7 +331,7 @@ body {
     }
 
     #chatbox, .chatbox {
-        height: 400px; /* ให้ chatbox สูง 400px และ scroll เฉพาะกล่องนี้บนจอเล็ก */
+        height: 400px;
         min-height: 0;
     }
 
