@@ -8,20 +8,19 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* !!! สำคัญมาก: ลบ height: 100vh; และ overflow: hidden; ออกจาก body !!! */
-    /* เพราะเราต้องการให้องค์ประกอบภายใน (chatbox) scroll ได้ ไม่ใช่ body */
+    /* ไม่ใส่ height: 100vh; และ overflow: hidden; ที่ body */
 }
 
 /* --- Header Section --- */
 .header {
-    background-color: #4CAF50; /* สีเขียวเข้ม */
+    background-color: #4CAF50;
     color: white;
     padding: 15px 20px;
     display: flex;
-    justify-content: space-between; /* จัดให้ h1 ชิดซ้าย, auth-buttons ชิดขวา */
+    justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    flex-shrink: 0; /* ทำให้ header ไม่ถูกบีบ */
+    flex-shrink: 0;
 }
 
 .header h1 {
@@ -30,13 +29,13 @@ body {
 }
 
 .auth-buttons {
-    display: flex; /* จัดปุ่มให้อยู่ในแนวนอน */
+    display: flex;
     align-items: center;
-    gap: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
+    gap: 10px;
 }
 
 .auth-buttons button {
-    background-color: #26a69a; /* สีเขียวเทอร์ควอยซ์ */
+    background-color: #26a69a;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -52,14 +51,14 @@ body {
 
 #userInfo {
     font-size: 1.1em;
-    color: white; /* เปลี่ยนสีเพื่อให้เห็นบนพื้นหลังสีเขียว */
-    display: flex; /* เพื่อจัด logoutBtn ให้อยู่ข้างๆ */
+    color: white;
+    display: flex;
     align-items: center;
     gap: 10px;
 }
 
 #logoutBtn {
-    background-color: #ef5350; /* สีแดง */
+    background-color: #ef5350;
 }
 
 #logoutBtn:hover {
@@ -69,16 +68,16 @@ body {
 /* --- Main Container --- */
 .main-container {
     display: flex;
-    flex-grow: 1; /* ให้ส่วนนี้ขยายเต็มพื้นที่ที่เหลือหลังจาก header */
-    padding: 20px; /* เพิ่ม padding ให้กับ main-container */
-    gap: 20px; /* ระยะห่างระหว่าง chatbot กับ ranking */
-    justify-content: center; /* จัดให้อยู่กึ่งกลางแนวนอน */
-    flex-wrap: wrap; /* ให้ห่อเมื่อหน้าจอเล็ก */
-    align-items: flex-start; /* จัดให้ส่วนประกอบเริ่มจากด้านบน */
-    overflow-y: auto; /* อาจจะต้องใช้ ถ้าเนื้อหาใน main-container เกินจอ */
+    flex-grow: 1;
+    padding: 20px;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    /* ไม่ต้องใส่ overflow-y: auto; */
 }
 
-/* --- Chatbot Section (แก้ไขหลัก) --- */
+/* --- Chatbot Section --- */
 .chatbot-section {
     background-color: #fff;
     border-radius: 12px;
@@ -86,22 +85,23 @@ body {
     width: 100%;
     max-width: 600px;
     display: flex;
-    flex-direction: column; /* ทำให้ chatbox และ input container ซ้อนกัน */
-    height: 600px; /* กำหนดความสูงรวมของ chatbot-section */
+    flex-direction: column;
+    height: 600px; /* ความสูงคงที่ */
     order: 1;
-    /* !!! สำคัญมาก: ลบ overflow: hidden; ออกจาก chatbot-section !!! */
 }
 
-.chatbox {
-    flex-grow: 1; /* สำคัญ: ทำให้ chatbox ขยายเต็มพื้นที่ที่เหลือใน chatbot-section */
+/* กล่องแชท (scroll ได้เฉพาะในนี้) */
+#chatbox, .chatbox {
+    flex-grow: 1;
     padding: 15px;
-    overflow-y: auto; /* สำคัญ: ทำให้เกิด scrollbar เมื่อข้อความเกิน */
+    overflow-y: auto; /* สำคัญ: scroll ในกล่องนี้เท่านั้น */
     background-color: #e8f5e9;
     border-bottom: 1px solid #eee;
     display: flex;
     flex-direction: column;
-    height: auto; /* กำหนดเป็น auto หรือลบออกไปเลยก็ได้ เพราะ flex-grow: 1 จะจัดการให้ */
-    min-height: 0; /* Safari/Firefox fix สำหรับ flex items ที่มี overflow */
+    min-height: 0;
+    height: 0; /* fix สำหรับ flexbox */
+    color: #333;
 }
 
 .message {
@@ -110,33 +110,33 @@ body {
     border-radius: 15px;
     max-width: 75%;
     word-wrap: break-word;
+    color: #333;
 }
 
 .message.user {
     background-color: #bbdefb;
     color: #333;
-    align-self: flex-end; /* ชิดขวา */
+    align-self: flex-end;
     border-bottom-right-radius: 5px;
 }
 
 .message.bot {
     background-color: #c8e6c9;
     color: #333;
-    align-self: flex-start; /* ชิดซ้าย */
+    align-self: flex-start;
     border-bottom-left-radius: 5px;
 }
 
 .chat-input-container {
-    display: flex; /* จัด input และ button ให้อยู่ในแนวนอน */
+    display: flex;
     padding: 10px 15px;
     background-color: #f9f9f9;
     border-top: 1px solid #eee;
-    flex-shrink: 0; /* สำคัญ: ป้องกันไม่ให้ container นี้ถูกบีบ */
-    /* height: auto; */ /* ไม่จำเป็นต้องกำหนด height ที่นี่ ถ้า content มันดันอยู่แล้ว */
+    flex-shrink: 0;
 }
 
 #chatInput {
-    flex-grow: 1; /* ให้ input ขยายเต็มพื้นที่ที่เหลือ */
+    flex-grow: 1;
     padding: 10px 15px;
     border: 1px solid #ddd;
     border-radius: 20px;
@@ -156,7 +156,7 @@ body {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
-    flex-shrink: 0; /* สำคัญ: ป้องกันไม่ให้ button ถูกบีบ */
+    flex-shrink: 0;
 }
 
 #sendBtn:hover {
@@ -187,7 +187,7 @@ body {
     list-style: none;
     padding: 0;
     max-height: 250px;
-    overflow-y: auto; /* ทำให้เกิด scrollbar เมื่อข้อความเกิน */
+    overflow-y: auto;
     text-align: left;
 }
 
@@ -304,7 +304,6 @@ body {
 /* --- Responsive adjustments --- */
 @media (max-width: 768px) {
     body {
-        /* ลบ height: 100vh; และ overflow: hidden; ออกจาก body ใน media query ด้วย */
         padding: 0;
         min-height: 100vh;
     }
@@ -329,11 +328,11 @@ body {
     .chatbot-section {
         max-width: 95%;
         margin-bottom: 20px;
-        height: auto; /* ให้ chatbot-section ปรับความสูงตามเนื้อหาเมื่อจอเล็ก */
+        height: auto;
     }
 
-    .chatbox {
-        height: 400px; /* กำหนดความสูงเฉพาะ chatbox บนจอเล็ก (เพื่อให้เกิด scrollbar) */
+    #chatbox, .chatbox {
+        height: 400px; /* ให้ chatbox สูง 400px และ scroll เฉพาะกล่องนี้บนจอเล็ก */
         min-height: 0;
     }
 
