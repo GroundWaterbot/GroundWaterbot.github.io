@@ -4,12 +4,12 @@ body {
     background-color: #e0f2f7; /* สีฟ้าอ่อนๆ */
     display: flex;
     flex-direction: column; /* จัดองค์ประกอบหลักให้เป็นแนวตั้ง */
-    min-height: 100vh;
+    min-height: 100vh; /* ให้ body สูงอย่างน้อยเต็มหน้าจอ */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    height: 100vh;        /* ป้องกันการ scroll ทั้งหน้า */
-    overflow: hidden;     /* ป้องกันการ scroll ทั้งหน้า */
+    /* !!! สำคัญมาก: ลบ height: 100vh; และ overflow: hidden; ออกจาก body !!! */
+    /* เพราะเราต้องการให้องค์ประกอบภายใน (chatbox) scroll ได้ ไม่ใช่ body */
 }
 
 /* --- Header Section --- */
@@ -21,6 +21,7 @@ body {
     justify-content: space-between; /* จัดให้ h1 ชิดซ้าย, auth-buttons ชิดขวา */
     align-items: center;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex-shrink: 0; /* ทำให้ header ไม่ถูกบีบ */
 }
 
 .header h1 {
@@ -68,12 +69,13 @@ body {
 /* --- Main Container --- */
 .main-container {
     display: flex;
-    flex-grow: 1; /* ให้ส่วนนี้ขยายเต็มพื้นที่ที่เหลือ */
+    flex-grow: 1; /* ให้ส่วนนี้ขยายเต็มพื้นที่ที่เหลือหลังจาก header */
     padding: 20px; /* เพิ่ม padding ให้กับ main-container */
     gap: 20px; /* ระยะห่างระหว่าง chatbot กับ ranking */
     justify-content: center; /* จัดให้อยู่กึ่งกลางแนวนอน */
     flex-wrap: wrap; /* ให้ห่อเมื่อหน้าจอเล็ก */
     align-items: flex-start; /* จัดให้ส่วนประกอบเริ่มจากด้านบน */
+    overflow-y: auto; /* อาจจะต้องใช้ ถ้าเนื้อหาใน main-container เกินจอ */
 }
 
 /* --- Chatbot Section (แก้ไขหลัก) --- */
@@ -87,6 +89,7 @@ body {
     flex-direction: column; /* ทำให้ chatbox และ input container ซ้อนกัน */
     height: 600px; /* กำหนดความสูงรวมของ chatbot-section */
     order: 1;
+    /* !!! สำคัญมาก: ลบ overflow: hidden; ออกจาก chatbot-section !!! */
 }
 
 .chatbox {
@@ -97,8 +100,8 @@ body {
     border-bottom: 1px solid #eee;
     display: flex;
     flex-direction: column;
-    height: 0; /* ป้องกันการขยายเกิน container */
-    min-height: 0; /* Safari fix */
+    height: auto; /* กำหนดเป็น auto หรือลบออกไปเลยก็ได้ เพราะ flex-grow: 1 จะจัดการให้ */
+    min-height: 0; /* Safari/Firefox fix สำหรับ flex items ที่มี overflow */
 }
 
 .message {
@@ -129,6 +132,7 @@ body {
     background-color: #f9f9f9;
     border-top: 1px solid #eee;
     flex-shrink: 0; /* สำคัญ: ป้องกันไม่ให้ container นี้ถูกบีบ */
+    /* height: auto; */ /* ไม่จำเป็นต้องกำหนด height ที่นี่ ถ้า content มันดันอยู่แล้ว */
 }
 
 #chatInput {
@@ -205,7 +209,6 @@ body {
 
 /* --- Modal Styles --- */
 .modal {
-    /* display: none; */ /* จะถูกจัดการด้วย JS */
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -214,7 +217,7 @@ body {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
-    display: flex; /* ใช้ flex เพื่อ center modal (จะถูกเปลี่ยนเป็น none/flex ด้วย JS) */
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -253,7 +256,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* Input Group in Modal */
 .input-group {
     margin-bottom: 15px;
     text-align: left;
@@ -299,13 +301,12 @@ body {
     color: red;
 }
 
-/* Responsive adjustments */
+/* --- Responsive adjustments --- */
 @media (max-width: 768px) {
     body {
+        /* ลบ height: 100vh; และ overflow: hidden; ออกจาก body ใน media query ด้วย */
         padding: 0;
         min-height: 100vh;
-        height: 100vh;
-        overflow: hidden;
     }
 
     .main-container {
@@ -325,20 +326,21 @@ body {
         justify-content: center;
     }
 
-    .chatbot-section, .ranking-section {
+    .chatbot-section {
         max-width: 95%;
         margin-bottom: 20px;
-        height: auto; /* ปรับให้ความสูงของ chatbot-section ยืดหดตามเนื้อหาเมื่อจอเล็ก */
+        height: auto; /* ให้ chatbot-section ปรับความสูงตามเนื้อหาเมื่อจอเล็ก */
     }
 
     .chatbox {
-        height: 400px; /* กำหนดความสูงเฉพาะ chatbox บนจอเล็ก */
+        height: 400px; /* กำหนดความสูงเฉพาะ chatbox บนจอเล็ก (เพื่อให้เกิด scrollbar) */
+        min-height: 0;
     }
 
     .chat-input-container {
         flex-direction: column;
         gap: 10px;
-        padding: 10px; /* ปรับ padding บนมือถือ */
+        padding: 10px;
     }
 
     #chatInput {
