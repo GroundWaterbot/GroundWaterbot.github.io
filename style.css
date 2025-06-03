@@ -8,6 +8,8 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    height: 100vh;        /* ป้องกันการ scroll ทั้งหน้า */
+    overflow: hidden;     /* ป้องกันการ scroll ทั้งหน้า */
 }
 
 /* --- Header Section --- */
@@ -83,7 +85,6 @@ body {
     max-width: 600px;
     display: flex;
     flex-direction: column; /* ทำให้ chatbox และ input container ซ้อนกัน */
-    /* overflow: hidden; */ /* ลบออกเพื่อให้ scrollbar ของ chatbox โผล่ได้เต็มที่ */
     height: 600px; /* กำหนดความสูงรวมของ chatbot-section */
     order: 1;
 }
@@ -96,6 +97,8 @@ body {
     border-bottom: 1px solid #eee;
     display: flex;
     flex-direction: column;
+    height: 0; /* ป้องกันการขยายเกิน container */
+    min-height: 0; /* Safari fix */
 }
 
 .message {
@@ -298,6 +301,13 @@ body {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    body {
+        padding: 0;
+        min-height: 100vh;
+        height: 100vh;
+        overflow: hidden;
+    }
+
     .main-container {
         flex-direction: column;
         align-items: center;
