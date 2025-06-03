@@ -8,8 +8,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    /* *** สำคัญมาก ***: ไม่มี 'height: 100vh;' หรือ 'overflow: hidden;' ที่นี่ */
-    /* ถ้ามีอยู่ ให้ลบออกทั้งหมด เพื่อให้ body สามารถ scroll ได้หากจำเป็น */
+    /* ยืนยันว่าไม่มี 'height: 100vh;' หรือ 'overflow: hidden;' ที่นี่ */
 }
 
 /* --- Header Section --- */
@@ -70,11 +69,9 @@ body {
     justify-content: center;
     flex-wrap: wrap;
     align-items: flex-start;
-    /* อาจจะต้องใช้ overflow-y: auto; ที่นี่ ถ้าเนื้อหาใน main-container เกินจอเมื่อ ranking หรือ chatbot มีขนาดใหญ่ */
-    /* หรือปล่อยให้ body จัดการการ scroll ของหน้าจอหลัก */
 }
 
-/* --- Chatbot Section (แก้ไขหลักสำคัญ) --- */
+/* --- Chatbot Section (แก้ไขหลักสำคัญที่สุด) --- */
 .chatbot-section {
     background-color: #fff;
     border-radius: 12px;
@@ -85,20 +82,16 @@ body {
     flex-direction: column; /* ทำให้ chatbox และ input container ซ้อนกัน */
     height: 600px; /* กำหนดความสูงรวมของ chatbot-section อย่างชัดเจน */
     order: 1;
-    /* *** สำคัญมาก ***: ลบ 'overflow: hidden;' ออกจากที่นี่ */
-    /* ถ้ามี ให้ลบออกเพื่อให้ chatbox และ chat input ทำงานได้ */
+    /* !!! ลบ 'overflow: hidden;' ออกจากที่นี่ !!! */
+    /* มันต้องไม่มีอยู่เพื่อให้ chatbox และ input แสดงผลและ scroll ได้ */
 }
 
 #chatbox, .chatbox {
-    flex-grow: 1; /* ทำให้ chatbox ขยายเต็มพื้นที่ที่เหลือใน chatbot-section */
-    flex-shrink: 1; /* ให้ chatbox สามารถย่อขนาดได้หากจำเป็น */
-    flex-basis: 0%; /* กำหนดขนาดพื้นฐานเริ่มต้นเป็น 0% */
-    /* shorthand คือ flex: 1; หรือ flex: 1 1 0%; */
-
-    min-height: 0; /* *** สำคัญมาก ***: อนุญาตให้ flex item ที่มี overflow ย่อขนาดได้ */
-    /* ลบ 'height: 0;' ออกจากที่นี่ เพราะมันจะขัดแย้งกับ flex-grow */
-
-    overflow-y: auto; /* *** สำคัญมาก ***: ทำให้เกิด scrollbar เมื่อข้อความเกิน */
+    flex: 1; /* shorthand for flex-grow: 1, flex-shrink: 1, flex-basis: 0% */
+    min-height: 0; /* สำคัญมากสำหรับ flex items ที่มี overflow เพื่อให้ย่อขนาดได้ */
+    /* !!! ลบ 'height: 0;' ออกจากที่นี่ !!! */
+    /* มันขัดแย้งกับ flex: 1 และทำให้ chatbox ไม่ขยายตัว */
+    overflow-y: auto; /* ทำให้เกิด scrollbar เมื่อข้อความเกิน */
     padding: 15px;
     background-color: #e8f5e9;
     border-bottom: 1px solid #eee;
@@ -135,9 +128,8 @@ body {
     padding: 10px 15px;
     background-color: #f9f9f9;
     border-top: 1px solid #eee;
-    flex-shrink: 0; /* *** สำคัญ ***: ป้องกันไม่ให้ container นี้ถูกบีบ */
+    flex-shrink: 0; /* ป้องกันไม่ให้ container นี้ถูกบีบ */
     gap: 10px;
-    /* ไม่ต้องกำหนด height ที่นี่ ปล่อยให้ content กำหนดเอง */
 }
 
 #chatInput {
@@ -160,7 +152,7 @@ body {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
-    flex-shrink: 0; /* สำคัญ: ป้องกันไม่ให้ button ถูกบีบ */
+    flex-shrink: 0; /* ป้องกันไม่ให้ button ถูกบีบ */
 }
 #sendBtn:hover {
     background-color: #45a049;
@@ -294,7 +286,7 @@ body {
     body {
         padding: 0;
         min-height: 100vh;
-        /* *** สำคัญมาก ***: ไม่มี 'height: 100vh;' หรือ 'overflow: hidden;' ที่นี่ */
+        /* ยืนยันว่าไม่มี 'height: 100vh;' หรือ 'overflow: hidden;' ที่นี่ */
     }
 
     .main-container {
@@ -318,12 +310,12 @@ body {
         max-width: 95%;
         margin-bottom: 20px;
         height: 400px; /* กำหนดความสูงรวมของ chatbot-section บนจอเล็ก */
-        /* *** สำคัญมาก ***: ลบ 'overflow: hidden;' ออกจากที่นี่ */
+        /* !!! ลบ 'overflow: hidden;' ออกจากที่นี่ด้วย !!! */
     }
 
     #chatbox, .chatbox {
         min-height: 0;
-        /* *** สำคัญมาก ***: ลบ 'height: 0;' ออกจากที่นี่ */
+        /* !!! ลบ 'height: 0;' ออกจากที่นี่ด้วย !!! */
     }
 
     .chat-input-container {
