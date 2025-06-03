@@ -1,16 +1,14 @@
-/* General Body & HTML */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #e0f2f7;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-/* --- Header Section --- */
 .header {
     background-color: #4CAF50;
     color: white;
@@ -59,12 +57,10 @@ body {
 #logoutBtn {
     background-color: #ef5350;
 }
-
 #logoutBtn:hover {
     background-color: #d32f2f;
 }
 
-/* --- Main Container --- */
 .main-container {
     display: flex;
     flex-grow: 1;
@@ -75,7 +71,6 @@ body {
     align-items: flex-start;
 }
 
-/* --- Chatbot Section --- */
 .chatbot-section {
     background-color: #fff;
     border-radius: 12px;
@@ -84,23 +79,22 @@ body {
     max-width: 600px;
     display: flex;
     flex-direction: column;
-    height: 600px; /* ความสูงคงที่ */
+    height: 600px;
     order: 1;
-    overflow: hidden; /* ป้องกัน child element เกินขอบ */
+    overflow: hidden;
 }
 
-/* กล่องแชท (scroll ได้เฉพาะในนี้) */
 #chatbox, .chatbox {
     flex: 1 1 0%;
+    min-height: 0;
+    height: 0;
+    overflow-y: auto;
     padding: 15px;
-    overflow-y: auto; /* scroll ในกล่องนี้เท่านั้น */
     background-color: #e8f5e9;
     border-bottom: 1px solid #eee;
     display: flex;
     flex-direction: column;
-    min-height: 0;
     color: #333;
-    /* แก้ไขให้กล่องแชทแสดงได้เต็มพื้นที่ที่เหลือ */
 }
 
 .message {
@@ -132,6 +126,7 @@ body {
     background-color: #f9f9f9;
     border-top: 1px solid #eee;
     flex-shrink: 0;
+    gap: 10px;
 }
 
 #chatInput {
@@ -151,7 +146,6 @@ body {
     border: none;
     border-radius: 20px;
     padding: 10px 20px;
-    margin-left: 10px;
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
@@ -162,7 +156,6 @@ body {
     background-color: #45a049;
 }
 
-/* --- Ranking Section --- */
 .ranking-section {
     background-color: #f1f8e9;
     border-radius: 10px;
@@ -201,12 +194,10 @@ body {
     border: 1px solid #e0e0e0;
     color: #555;
 }
-
 #rankingList li:nth-child(odd) {
     background-color: #e0f2f7;
 }
 
-/* --- Modal Styles --- */
 .modal {
     position: fixed;
     z-index: 1000;
@@ -242,7 +233,6 @@ body {
     right: 15px;
     cursor: pointer;
 }
-
 .close-button:hover,
 .close-button:focus {
     color: black;
@@ -300,7 +290,6 @@ body {
     color: red;
 }
 
-/* --- Responsive adjustments --- */
 @media (max-width: 768px) {
     body {
         padding: 0;
@@ -327,11 +316,11 @@ body {
     .chatbot-section {
         max-width: 95%;
         margin-bottom: 20px;
-        height: auto;
+        height: 400px; /* ย่อสูงบนจอเล็ก */
     }
 
     #chatbox, .chatbox {
-        height: 400px;
+        height: auto;
         min-height: 0;
     }
 
