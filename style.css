@@ -41,11 +41,9 @@ body {
     font-size: 16px;
     transition: background-color 0.3s ease;
 }
-
 .auth-buttons button:hover {
     background-color: #00897b;
 }
-
 #userInfo {
     font-size: 1.1em;
     color: white;
@@ -53,7 +51,6 @@ body {
     align-items: center;
     gap: 10px;
 }
-
 #logoutBtn {
     background-color: #ef5350;
 }
@@ -71,6 +68,7 @@ body {
     align-items: flex-start;
 }
 
+/* --- Chatbot Section --- */
 .chatbot-section {
     background-color: #fff;
     border-radius: 12px;
@@ -87,7 +85,6 @@ body {
 #chatbox, .chatbox {
     flex: 1 1 0%;
     min-height: 0;
-    height: 0;
     overflow-y: auto;
     padding: 15px;
     background-color: #e8f5e9;
@@ -95,6 +92,7 @@ body {
     display: flex;
     flex-direction: column;
     color: #333;
+    /* height: auto;  // อย่าใส่ height: auto หรือ height: 0 ที่นี่ */
 }
 
 .message {
@@ -151,11 +149,11 @@ body {
     transition: background-color 0.3s ease;
     flex-shrink: 0;
 }
-
 #sendBtn:hover {
     background-color: #45a049;
 }
 
+/* --- Ranking Section --- */
 .ranking-section {
     background-color: #f1f8e9;
     border-radius: 10px;
@@ -166,7 +164,6 @@ body {
     height: fit-content;
     order: 2;
 }
-
 .ranking-section h2 {
     color: #388e3c;
     margin-top: 0;
@@ -174,7 +171,6 @@ body {
     border-bottom: 1px solid #e0e0e0;
     padding-bottom: 10px;
 }
-
 #rankingList {
     list-style: none;
     padding: 0;
@@ -182,7 +178,6 @@ body {
     overflow-y: auto;
     text-align: left;
 }
-
 #rankingList li {
     background-color: #ffffff;
     padding: 10px 15px;
@@ -198,6 +193,7 @@ body {
     background-color: #e0f2f7;
 }
 
+/* --- Modal Styles --- */
 .modal {
     position: fixed;
     z-index: 1000;
@@ -211,7 +207,6 @@ body {
     justify-content: center;
     align-items: center;
 }
-
 .modal-content {
     background-color: #fefefe;
     padding: 30px;
@@ -223,7 +218,6 @@ body {
     position: relative;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
-
 .close-button {
     color: #aaa;
     font-size: 28px;
@@ -239,24 +233,20 @@ body {
     text-decoration: none;
     cursor: pointer;
 }
-
 .modal-content h2 {
     color: #00796b;
     margin-bottom: 20px;
 }
-
 .input-group {
     margin-bottom: 15px;
     text-align: left;
 }
-
 .input-group label {
     display: block;
     margin-bottom: 5px;
     color: #555;
     font-weight: bold;
 }
-
 .modal-content input[type="text"],
 .modal-content input[type="password"] {
     width: calc(100% - 22px);
@@ -266,7 +256,6 @@ body {
     font-size: 16px;
     box-sizing: border-box;
 }
-
 .modal-content button[type="submit"] {
     background-color: #26a69a;
     color: white;
@@ -279,11 +268,9 @@ body {
     margin-top: 20px;
     transition: background-color 0.3s ease;
 }
-
 .modal-content button[type="submit"]:hover {
     background-color: #00897b;
 }
-
 #authMessage {
     margin-top: 15px;
     font-weight: bold;
@@ -316,11 +303,10 @@ body {
     .chatbot-section {
         max-width: 95%;
         margin-bottom: 20px;
-        height: 400px; /* ย่อสูงบนจอเล็ก */
+        height: 400px;
     }
 
     #chatbox, .chatbox {
-        height: auto;
         min-height: 0;
     }
 
