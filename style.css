@@ -3,16 +3,16 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #e0f2f7; /* สีฟ้าอ่อนๆ */
     display: flex;
-    flex-direction: column; /* เปลี่ยนเป็น column เพื่อให้ header และ main-container ซ้อนกันแนวตั้ง */
+    flex-direction: column; /* จัดองค์ประกอบหลักให้เป็นแนวตั้ง */
     min-height: 100vh;
     margin: 0;
     padding: 0; /* ลบ padding ตรงนี้ เพราะจะใส่ในแต่ละส่วนแทน */
     box-sizing: border-box;
 }
 
-/* --- Header Section (ใหม่) --- */
+/* --- Header Section --- */
 .header {
-    background-color: #4CAF50; /* สีเขียวเข้มตามตัวอย่างก่อนหน้า */
+    background-color: #4CAF50; /* สีเขียวเข้ม */
     color: white;
     padding: 15px 20px;
     display: flex;
@@ -26,7 +26,7 @@ body {
     font-size: 24px;
 }
 
-.auth-buttons { /* เดิมคือ .auth-section แต่ตอนนี้อยู่ใน header และชื่อดีขึ้น */
+.auth-buttons {
     display: flex; /* จัดปุ่มให้อยู่ในแนวนอน */
     align-items: center;
     gap: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
@@ -63,7 +63,7 @@ body {
     background-color: #d32f2f;
 }
 
-/* --- Main Container (ใหม่) --- */
+/* --- Main Container --- */
 .main-container {
     display: flex;
     flex-grow: 1; /* ให้ส่วนนี้ขยายเต็มพื้นที่ที่เหลือ */
@@ -74,72 +74,27 @@ body {
     align-items: flex-start; /* จัดให้ส่วนประกอบเริ่มจากด้านบน */
 }
 
-/* Ranking Section */
-.ranking-section {
-    background-color: #f1f8e9; /* สีเขียวอ่อนมาก */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* ปรับ shadow ให้คล้ายกับ chatbot-section */
-    padding: 20px;
-    width: 100%;
-    max-width: 350px; /* กำหนด max-width สำหรับ ranking */
-    height: fit-content; /* ปรับความสูงตามเนื้อหา */
-    order: 2; /* ให้ Ranking อยู่ด้านขวา (ลำดับที่ 2) เมื่อจอใหญ่ */
-}
-
-.ranking-section h2 {
-    color: #388e3c; /* สีเขียวเข้ม */
-    margin-top: 0; /* ลบ margin-top เดิม */
-    margin-bottom: 15px;
-    border-bottom: 1px solid #e0e0e0; /* เพิ่มเส้นแบ่ง */
-    padding-bottom: 10px;
-}
-
-#rankingList {
-    list-style: none;
-    padding: 0;
-    max-height: 250px; /* ยังคงความสูงสูงสุด */
-    overflow-y: auto;
-    text-align: left;
-}
-
-#rankingList li {
-    background-color: #ffffff;
-    padding: 10px 15px;
-    margin-bottom: 8px;
-    border-radius: 6px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid #e0e0e0;
-    color: #555; /* สีข้อความ */
-}
-
-#rankingList li:nth-child(odd) {
-    background-color: #e0f2f7; /* สีฟ้าอ่อนสำหรับแถวคี่ */
-}
-
 /* Chatbot Section */
 .chatbot-section {
     background-color: #fff; /* ใช้สีขาวพื้นหลังหลัก */
-    border-radius: 12px; /* ใช้ border-radius เดียวกันกับ container เดิม */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* ใช้ shadow เดียวกัน */
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 600px; /* กำหนด max-width */
     display: flex;
     flex-direction: column; /* จัดองค์ประกอบภายในให้เป็นแนวตั้ง */
-    overflow: hidden;
+    overflow: hidden; /* สำคัญ: เพื่อไม่ให้ scrollbar ของ chatbox โผล่ออกมานอกขอบ */
     height: 600px; /* กำหนดความสูงให้ Chatbot */
     order: 1; /* ให้ Chatbot อยู่ด้านซ้าย (ลำดับที่ 1) เมื่อจอใหญ่ */
 }
 
-.chatbox { /* #chatbox กลายเป็น .chatbox ใน index.html ล่าสุด */
-    flex-grow: 1;
+.chatbox { /* .chatbox ไม่ใช่ #chatbox */
+    flex-grow: 1; /* ให้ chatbox ขยายเต็มพื้นที่ที่เหลือใน chatbot-section */
     padding: 15px;
-    overflow-y: auto;
+    overflow-y: auto; /* สำคัญ: ทำให้เกิด scrollbar เมื่อข้อความเกิน */
     background-color: #e8f5e9; /* สีเขียวมิ้นต์อ่อนๆ */
     border-bottom: 1px solid #eee;
-    text-align: left;
-    display: flex; /* เพิ่ม display flex เพื่อให้ message ชิดด้านข้าง */
+    display: flex; /* เพื่อให้ message ชิดด้านข้าง */
     flex-direction: column; /* จัดข้อความใน chatbox ให้เป็น column */
 }
 
@@ -149,8 +104,6 @@ body {
     border-radius: 15px;
     max-width: 75%;
     word-wrap: break-word;
-    /* ลบ margin-left/right: auto ออกจากตรงนี้ เพราะจะใส่ใน .user และ .bot */
-    /* ลบ text-align ออกจากตรงนี้ */
 }
 
 .message.user {
@@ -196,17 +149,59 @@ body {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
-    width: auto; /* ลบ width เดิม */
-    vertical-align: middle; /* อันนี้อาจจะไม่จำเป็นแล้วเมื่อใช้ flex */
 }
 
 #sendBtn:hover {
     background-color: #45a049;
 }
 
+/* Ranking Section */
+.ranking-section {
+    background-color: #f1f8e9; /* สีเขียวอ่อนมาก */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* ปรับ shadow ให้คล้ายกับ chatbot-section */
+    padding: 20px;
+    width: 100%;
+    max-width: 350px; /* กำหนด max-width สำหรับ ranking */
+    height: fit-content; /* ปรับความสูงตามเนื้อหา */
+    order: 2; /* ให้ Ranking อยู่ด้านขวา (ลำดับที่ 2) เมื่อจอใหญ่ */
+}
+
+.ranking-section h2 {
+    color: #388e3c; /* สีเขียวเข้ม */
+    margin-top: 0; /* ลบ margin-top เดิม */
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0; /* เพิ่มเส้นแบ่ง */
+    padding-bottom: 10px;
+}
+
+#rankingList {
+    list-style: none;
+    padding: 0;
+    max-height: 250px; /* ยังคงความสูงสูงสุด */
+    overflow-y: auto; /* ทำให้เกิด scrollbar เมื่อข้อความเกิน */
+    text-align: left;
+}
+
+#rankingList li {
+    background-color: #ffffff;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    color: #555; /* สีข้อความ */
+}
+
+#rankingList li:nth-child(odd) {
+    background-color: #e0f2f7; /* สีฟ้าอ่อนสำหรับแถวคี่ */
+}
+
 /* Modal Styles */
 .modal {
-    display: none; /* Hidden by default */
+    /* display: none; */ /* จะถูกจัดการด้วย JS */
     position: fixed; /* Stay in place */
     z-index: 1000; /* Sit on top */
     left: 0;
@@ -215,7 +210,7 @@ body {
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    display: flex; /* ใช้ flex เพื่อ center modal */
+    display: flex; /* ใช้ flex เพื่อ center modal (จะถูกเปลี่ยนเป็น none/flex ด้วย JS) */
     justify-content: center;
     align-items: center;
 }
@@ -254,7 +249,7 @@ body {
     margin-bottom: 20px;
 }
 
-/* --- Input Group in Modal (ใหม่) --- */
+/* Input Group in Modal */
 .input-group {
     margin-bottom: 15px;
     text-align: left; /* จัดให้อักษรชิดซ้าย */
@@ -271,7 +266,6 @@ body {
 .modal-content input[type="password"] {
     width: calc(100% - 22px); /* ลบ padding 2 ข้างและ border 2 ข้าง */
     padding: 12px;
-    /* margin-bottom: 15px; -- ย้ายไปที่ .input-group */
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 16px;
