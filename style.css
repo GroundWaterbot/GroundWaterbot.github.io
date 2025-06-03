@@ -74,7 +74,7 @@ body {
     align-items: flex-start; /* จัดให้ส่วนประกอบเริ่มจากด้านบน */
 }
 
-/* --- Chatbot Section --- */
+/* --- Chatbot Section (แก้ไขหลัก) --- */
 .chatbot-section {
     background-color: #fff;
     border-radius: 12px;
@@ -83,26 +83,19 @@ body {
     max-width: 600px;
     display: flex;
     flex-direction: column; /* ทำให้ chatbox และ input container ซ้อนกัน */
+    /* overflow: hidden; */ /* ลบออกเพื่อให้ scrollbar ของ chatbox โผล่ได้เต็มที่ */
     height: 600px; /* กำหนดความสูงรวมของ chatbot-section */
     order: 1;
 }
 
 .chatbox {
-    flex-grow: 1; /* ทำให้ chatbox ขยายเต็มพื้นที่ที่เหลือใน chatbot-section */
+    flex-grow: 1; /* สำคัญ: ทำให้ chatbox ขยายเต็มพื้นที่ที่เหลือใน chatbot-section */
     padding: 15px;
     overflow-y: auto; /* สำคัญ: ทำให้เกิด scrollbar เมื่อข้อความเกิน */
     background-color: #e8f5e9;
     border-bottom: 1px solid #eee;
     display: flex;
     flex-direction: column;
-    /* --- เพิ่ม / แก้ไข ตรงนี้เพื่อกำหนดความสูงให้ chatbox สามารถ scroll ได้ --- */
-    /* วิธีที่ 1: กำหนดความสูงตายตัว */
-    /* height: 500px; */ /* ตัวอย่าง: กำหนดความสูงให้ chatbox โดยตรง */
-
-    /* วิธีที่ 2: (แนะนำ) ใช้ flex-grow ให้มันเติมเต็ม และให้ parent มีความสูง */
-    /* ในกรณีนี้ .chatbot-section มี height: 600px; อยู่แล้ว */
-    /* และ chat-input-container จะมี height คงที่ */
-    /* ดังนั้น flex-grow: 1; จะทำให้ chatbox รับผิดชอบพื้นที่ที่เหลือ */
 }
 
 .message {
@@ -128,17 +121,15 @@ body {
 }
 
 .chat-input-container {
-    display: flex;
+    display: flex; /* จัด input และ button ให้อยู่ในแนวนอน */
     padding: 10px 15px;
     background-color: #f9f9f9;
     border-top: 1px solid #eee;
-    flex-shrink: 0; /* ป้องกันไม่ให้ container นี้ถูกบีบ */
-    /* อาจจะลองเพิ่ม height: 60px; (หรือค่าที่เหมาะสม) ถ้ายังหายไป */
-    /* height: 60px; */ /* ลองเพิ่มดูถ้า input ยังหาย */
+    flex-shrink: 0; /* สำคัญ: ป้องกันไม่ให้ container นี้ถูกบีบ */
 }
 
 #chatInput {
-    flex-grow: 1;
+    flex-grow: 1; /* ให้ input ขยายเต็มพื้นที่ที่เหลือ */
     padding: 10px 15px;
     border: 1px solid #ddd;
     border-radius: 20px;
@@ -158,7 +149,7 @@ body {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
-    flex-shrink: 0; /* ป้องกันไม่ให้ button ถูกบีบ */
+    flex-shrink: 0; /* สำคัญ: ป้องกันไม่ให้ button ถูกบีบ */
 }
 
 #sendBtn:hover {
@@ -189,7 +180,7 @@ body {
     list-style: none;
     padding: 0;
     max-height: 250px;
-    overflow-y: auto;
+    overflow-y: auto; /* ทำให้เกิด scrollbar เมื่อข้อความเกิน */
     text-align: left;
 }
 
@@ -211,6 +202,7 @@ body {
 
 /* --- Modal Styles --- */
 .modal {
+    /* display: none; */ /* จะถูกจัดการด้วย JS */
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -219,7 +211,7 @@ body {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
-    display: flex;
+    display: flex; /* ใช้ flex เพื่อ center modal (จะถูกเปลี่ยนเป็น none/flex ด้วย JS) */
     justify-content: center;
     align-items: center;
 }
@@ -258,6 +250,7 @@ body {
     margin-bottom: 20px;
 }
 
+/* Input Group in Modal */
 .input-group {
     margin-bottom: 15px;
     text-align: left;
@@ -303,7 +296,7 @@ body {
     color: red;
 }
 
-/* --- Responsive adjustments --- */
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .main-container {
         flex-direction: column;
@@ -322,20 +315,20 @@ body {
         justify-content: center;
     }
 
-    .chatbot-section {
+    .chatbot-section, .ranking-section {
         max-width: 95%;
         margin-bottom: 20px;
-        height: auto; /* ให้ chatbot-section ปรับความสูงตามเนื้อหาเมื่อจอเล็ก */
+        height: auto; /* ปรับให้ความสูงของ chatbot-section ยืดหดตามเนื้อหาเมื่อจอเล็ก */
     }
 
     .chatbox {
-        height: 400px; /* กำหนดความสูงของ chatbox บนจอเล็ก (เพื่อให้เกิด scrollbar) */
+        height: 400px; /* กำหนดความสูงเฉพาะ chatbox บนจอเล็ก */
     }
 
     .chat-input-container {
         flex-direction: column;
         gap: 10px;
-        padding: 10px;
+        padding: 10px; /* ปรับ padding บนมือถือ */
     }
 
     #chatInput {
