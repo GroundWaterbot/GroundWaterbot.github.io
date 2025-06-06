@@ -2,8 +2,10 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AI Chatbot น้ำบาดาล</title>
+    <!-- Google Fonts: Kanit (สดใส อ่านง่ายสำหรับภาษาไทย) -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -21,10 +23,12 @@
 
     <div class="main-container">
         <div class="chatbot-section" style="display: none;">
-            <div id="chatbox" class="chatbox"> <div class="message bot">สวัสดีคะ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล</div>
-                <div class="message bot">กรุณาเข้าสู่ระบบ หรือลงทะเบียน เพื่อใช้งาน Chatbot และเล่นเกมสะสมแต้มคะ!</div>
+            <div id="chatbox" class="chatbox">
+                <div class="message bot">สวัสดีค่ะ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล</div>
+                <div class="message bot">กรุณาเข้าสู่ระบบ หรือลงทะเบียน เพื่อใช้งาน Chatbot และเล่นเกมสะสมแต้มค่ะ!</div>
             </div>
-            <div class="chat-input-container"> <input type="text" id="chatInput" placeholder="พิมพ์ข้อความที่นี่...">
+            <div class="chat-input-container">
+                <input type="text" id="chatInput" placeholder="พิมพ์ข้อความที่นี่..." autocomplete="off">
                 <button id="sendBtn">ส่ง</button>
             </div>
         </div>
@@ -41,12 +45,14 @@
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <h2 id="modalTitle">เข้าสู่ระบบ</h2>
-            <form id="authForm">
-                <div class="input-group"> <label for="authUsername">ชื่อผู้ใช้:</label>
-                    <input type="text" id="authUsername" placeholder="ชื่อผู้ใช้" required>
+            <form id="authForm" autocomplete="off">
+                <div class="input-group">
+                    <label for="authUsername">ชื่อผู้ใช้:</label>
+                    <input type="text" id="authUsername" placeholder="ชื่อผู้ใช้" required autocomplete="username">
                 </div>
-                <div class="input-group"> <label for="authPassword">รหัสผ่าน:</label>
-                    <input type="password" id="authPassword" placeholder="รหัสผ่าน" required>
+                <div class="input-group">
+                    <label for="authPassword">รหัสผ่าน:</label>
+                    <input type="password" id="authPassword" placeholder="รหัสผ่าน" required autocomplete="current-password">
                 </div>
                 <p id="authMessage" style="color: red; margin-top: 10px;"></p>
                 <button type="submit" id="submitAuthBtn">เข้าสู่ระบบ</button>

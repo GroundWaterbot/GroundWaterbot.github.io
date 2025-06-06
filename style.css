@@ -1,340 +1,320 @@
-/* General Body & HTML */
+/* Mobile First: ธีมน้ำบาดาล ฟ้า-น้ำเงิน-ขาว-เขียวสดใส */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #e0f2f7; /* สีฟ้าอ่อนๆ */
+    font-family: 'Kanit', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #b8e8fc 0%, #ecfff7 100%);
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    /* ยืนยันว่าไม่มี 'height: 100vh;' หรือ 'overflow: hidden;' ที่นี่ */
+    color: #205072;
 }
 
-/* --- Header Section --- */
 .header {
-    background-color: #4CAF50; /* สีเขียวเข้ม */
-    color: white;
-    padding: 15px 20px;
+    background: linear-gradient(90deg, #5ee7df 0%, #b490ca 100%);
+    color: #fff;
+    text-shadow: 1px 1px 4px #409dae55;
+    padding: 18px 10px 13px 10px;
     display: flex;
-    justify-content: space-between; /* จัดให้ h1 ชิดซ้าย, auth-buttons ชิดขวา */
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    flex-shrink: 0; /* ทำให้ header ไม่ถูกบีบ */
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    box-shadow: 0 2px 10px #b8e8fc80;
 }
 
 .header h1 {
+    font-size: 1.6em;
     margin: 0;
-    font-size: 24px;
+    letter-spacing: 1px;
 }
 
 .auth-buttons {
-    display: flex; /* จัดปุ่มให้อยู่ในแนวนอน */
-    align-items: center;
-    gap: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
-}
-.auth-buttons button {
-    background-color: #26a69a;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-.auth-buttons button:hover {
-    background-color: #00897b;
-}
-#userInfo {
-    font-size: 1.1em;
-    color: white;
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
     gap: 10px;
-}
-#logoutBtn {
-    background-color: #ef5350;
-}
-#logoutBtn:hover {
-    background-color: #d32f2f;
+    width: 100%;
+    justify-content: flex-end;
 }
 
-/* --- Main Container --- */
+.auth-buttons button, #logoutBtn {
+    background: linear-gradient(90deg, #38b6ff 0%, #47e6c1 100%);
+    color: #fff;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 22px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px #38b6ff33;
+    cursor: pointer;
+    transition: background 0.24s;
+}
+
+.auth-buttons button:hover, #logoutBtn:hover {
+    background: linear-gradient(90deg, #47e6c1 0%, #38b6ff 100%);
+}
+
+#logoutBtn {
+    background: linear-gradient(90deg, #ff7676 0%, #fda085 100%);
+    color: #fff;
+    margin-left: 3px;
+}
+
+#logoutBtn:hover {
+    background: linear-gradient(90deg, #fda085 0%, #ff7676 100%);
+}
+
+#userInfo {
+    color: #22546c;
+    font-size: 1.05em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* กล่องแชท/คะแนน Mobile-first */
 .main-container {
     display: flex;
-    flex-grow: 1; /* ให้ส่วนนี้ขยายเต็มพื้นที่ที่เหลือหลังจาก header */
-    padding: 20px;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-    align-items: flex-start;
+    flex-direction: column;
+    padding: 12px 4px 6px 4px;
+    gap: 16px;
 }
 
-/* --- Chatbot Section (แก้ไขหลักสำคัญที่สุด) --- */
 .chatbot-section {
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    background: #e3f6fc;
+    border-radius: 18px;
+    box-shadow: 0 2px 10px #8ed6ff30;
     width: 100%;
-    max-width: 600px;
+    max-width: 540px;
+    margin: auto;
     display: flex;
-    flex-direction: column; /* ทำให้ chatbox และ input container ซ้อนกัน */
-    height: 600px; /* กำหนดความสูงรวมของ chatbot-section อย่างชัดเจน */
-    order: 1;
-    /* !!! ลบ 'overflow: hidden;' ออกจากที่นี่ !!! */
-    /* มันต้องไม่มีอยู่เพื่อให้ chatbox และ input แสดงผลและ scroll ได้ */
+    flex-direction: column;
+    height: 70vh;
+    min-height: 370px;
 }
 
 #chatbox, .chatbox {
-    flex: 1; /* shorthand for flex-grow: 1, flex-shrink: 1, flex-basis: 0% */
-    min-height: 0; /* สำคัญมากสำหรับ flex items ที่มี overflow เพื่อให้ย่อขนาดได้ */
-    /* !!! ลบ 'height: 0;' ออกจากที่นี่ !!! */
-    /* มันขัดแย้งกับ flex: 1 และทำให้ chatbox ไม่ขยายตัว */
-    overflow-y: auto; /* ทำให้เกิด scrollbar เมื่อข้อความเกิน */
-    padding: 15px;
-    background-color: #e8f5e9;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    flex-direction: column;
-    color: #333;
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 7px 10px 7px;
+    background: #f7fdff;
+    border-radius: 18px 18px 0 0;
+    border-bottom: 1px solid #c8e6f8;
+    font-size: 1.05em;
 }
 
 .message {
-    padding: 10px 15px;
+    padding: 8px 13px;
     margin-bottom: 10px;
-    border-radius: 15px;
-    max-width: 75%;
-    word-wrap: break-word;
-    color: #333;
+    border-radius: 17px;
+    max-width: 86%;
+    word-break: break-word;
+    box-shadow: 0 1px 5px #38b6ff22;
+    font-size: 1em;
 }
 
 .message.user {
-    background-color: #bbdefb;
-    color: #333;
-    align-self: flex-end; /* ชิดขวา */
-    border-bottom-right-radius: 5px;
+    background: linear-gradient(90deg, #d4fc79 0%, #96e6a1 100%);
+    align-self: flex-end;
+    border-bottom-right-radius: 7px;
+    color: #236b63;
 }
 
 .message.bot {
-    background-color: #c8e6c9;
-    color: #333;
-    align-self: flex-start; /* ชิดซ้าย */
-    border-bottom-left-radius: 5px;
+    background: linear-gradient(90deg, #38b6ff22 0%, #ffffff 80%);
+    align-self: flex-start;
+    border-bottom-left-radius: 7px;
+    color: #205072;
 }
 
 .chat-input-container {
-    display: flex; /* จัด input และ button ให้อยู่ในแนวนอน */
-    padding: 10px 15px;
-    background-color: #f9f9f9;
-    border-top: 1px solid #eee;
-    flex-shrink: 0; /* ป้องกันไม่ให้ container นี้ถูกบีบ */
-    gap: 10px;
+    display: flex;
+    gap: 7px;
+    padding: 10px 7px 13px 7px;
+    background: #ecfff7;
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
 }
 
 #chatInput {
-    flex-grow: 1; /* ให้ input ขยายเต็มพื้นที่ที่เหลือ */
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    margin: 0;
-    box-sizing: border-box;
+    flex: 1;
+    padding: 12px 14px;
+    border: 1.4px solid #50d8d7;
+    border-radius: 18px;
     font-size: 16px;
     outline: none;
+    background: #fff;
 }
 
 #sendBtn {
-    background-color: #4CAF50;
-    color: white;
+    padding: 12px 18px;
+    background: linear-gradient(90deg, #38b6ff 0%, #47e6c1 100%);
     border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
+    border-radius: 16px;
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-    flex-shrink: 0; /* ป้องกันไม่ให้ button ถูกบีบ */
-}
-#sendBtn:hover {
-    background-color: #45a049;
+    box-shadow: 0 1px 4px #38b6ff33;
+    transition: background 0.18s;
 }
 
-/* --- Ranking Section --- */
+#sendBtn:hover {
+    background: linear-gradient(90deg, #47e6c1 0%, #38b6ff 100%);
+}
+
+/* คะแนน/อันดับ */
 .ranking-section {
-    background-color: #f1f8e9;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    background: #f7fdfd;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px #8ed6ff30;
+    padding: 17px 13px;
     width: 100%;
-    max-width: 350px;
+    max-width: 340px;
+    margin: auto;
     height: fit-content;
-    order: 2;
 }
+
 .ranking-section h2 {
-    color: #388e3c;
-    margin-top: 0;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #e0e0e0;
-    padding-bottom: 10px;
+    color: #38b6ff;
+    margin: 0 0 10px 0;
+    border-bottom: 1px solid #cdefff;
+    padding-bottom: 7px;
+    font-size: 1.2em;
+    font-weight: bold;
 }
+
 #rankingList {
     list-style: none;
     padding: 0;
-    max-height: 250px;
+    max-height: 230px;
     overflow-y: auto;
-    text-align: left;
 }
+
 #rankingList li {
-    background-color: #ffffff;
-    padding: 10px 15px;
-    margin-bottom: 8px;
+    background: linear-gradient(90deg, #e3f6fc 0%, #f7fdff 100%);
+    padding: 9px 11px;
+    margin-bottom: 7px;
     border-radius: 6px;
+    font-size: 0.98em;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid #e0e0e0;
-    color: #555;
-}
-#rankingList li:nth-child(odd) {
-    background-color: #e0f2f7;
+    border: 1px solid #cdefff;
+    color: #22546c;
 }
 
-/* --- Modal Styles --- */
+#rankingList li:nth-child(odd) {
+    background: linear-gradient(90deg, #f7fdff 0%, #e3f6fc 100%);
+}
+
+/* Modal */
 .modal {
     position: fixed;
     z-index: 1000;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    background: rgba(38,182,255,0.17);
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .modal-content {
-    background-color: #fefefe;
-    padding: 30px;
-    border: 1px solid #888;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 400px;
+    background: linear-gradient(135deg, #f7fdff 0%, #e3f6fc 100%);
+    padding: 22px 14px 30px 14px;
+    border: 1.5px solid #cdefff;
+    border-radius: 13px;
+    max-width: 97vw;
+    min-width: 0;
+    width: 97vw;
     text-align: center;
     position: relative;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 6px 20px #b8e8fcaa;
 }
+
 .close-button {
-    color: #aaa;
+    color: #38b6ff;
     font-size: 28px;
     font-weight: bold;
     position: absolute;
     top: 10px;
-    right: 15px;
+    right: 18px;
     cursor: pointer;
+    background: none;
+    border: none;
 }
+
 .close-button:hover,
 .close-button:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+    color: #47e6c1;
 }
-.modal-content h2 {
-    color: #00796b;
-    margin-bottom: 20px;
-}
+
 .input-group {
-    margin-bottom: 15px;
+    margin-bottom: 13px;
     text-align: left;
 }
 .input-group label {
     display: block;
     margin-bottom: 5px;
-    color: #555;
+    color: #205072;
     font-weight: bold;
 }
 .modal-content input[type="text"],
 .modal-content input[type="password"] {
     width: calc(100% - 22px);
     padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    border: 1px solid #38b6ff55;
+    border-radius: 7px;
     font-size: 16px;
-    box-sizing: border-box;
+    background: #fff;
 }
 .modal-content button[type="submit"] {
-    background-color: #26a69a;
+    background: linear-gradient(90deg, #38b6ff 0%, #47e6c1 100%);
     color: white;
     padding: 12px 25px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 18px;
     width: 100%;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
+    margin-top: 14px;
+    transition: background 0.3s;
+    font-weight: bold;
 }
 .modal-content button[type="submit"]:hover {
-    background-color: #00897b;
+    background: linear-gradient(90deg, #47e6c1 0%, #38b6ff 100%);
 }
 #authMessage {
-    margin-top: 15px;
+    margin-top: 11px;
     font-weight: bold;
-    color: red;
+    color: #e74c3c;
 }
 
-@media (max-width: 768px) {
-    body {
-        padding: 0;
-        min-height: 100vh;
-        /* ยืนยันว่าไม่มี 'height: 100vh;' หรือ 'overflow: hidden;' ที่นี่ */
-    }
-
+@media (min-width: 600px) {
     .main-container {
-        flex-direction: column;
-        align-items: center;
-        padding: 10px;
-    }
-
-    .header {
-        flex-direction: column;
-        gap: 10px;
-        padding: 10px;
-    }
-
-    .auth-buttons {
-        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: flex-start;
         justify-content: center;
+        gap: 28px;
+        padding: 28px 0 0 0;
     }
-
     .chatbot-section {
-        max-width: 95%;
-        margin-bottom: 20px;
-        height: 400px; /* กำหนดความสูงรวมของ chatbot-section บนจอเล็ก */
-        /* !!! ลบ 'overflow: hidden;' ออกจากที่นี่ด้วย !!! */
+        height: 74vh;
+        min-height: 400px;
     }
+    .ranking-section {
+        min-width: 240px;
+    }
+}
 
+@media (max-width: 400px) {
+    .modal-content, .chatbot-section, .ranking-section {
+        padding-left: 3px;
+        padding-right: 3px;
+    }
     #chatbox, .chatbox {
-        min-height: 0;
-        /* !!! ลบ 'height: 0;' ออกจากที่นี่ด้วย !!! */
-    }
-
-    .chat-input-container {
-        flex-direction: column;
-        gap: 10px;
-        padding: 10px;
-    }
-
-    #chatInput {
-        width: 100%;
-        margin: 0;
-    }
-
-    #sendBtn {
-        width: 100%;
-        margin-left: 0;
-    }
-
-    .modal-content {
-        padding: 20px;
+        font-size: 0.94em;
     }
 }
