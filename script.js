@@ -43,6 +43,7 @@ function appendMessage(sender, text) {
     messageDiv.classList.add('message', sender);
     messageDiv.innerHTML = text;
     chatbox.appendChild(messageDiv);
+    // เลื่อนลงล่างสุดเสมอ
     chatbox.scrollTop = chatbox.scrollHeight;
 }
 
