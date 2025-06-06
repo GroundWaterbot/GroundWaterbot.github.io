@@ -104,12 +104,12 @@ body {
 }
 
 .message {
-    display: inline-block;
-    padding: 8px 13px;
+    display: block;
+    width: fit-content;
+    max-width: 80%;
     margin-bottom: 10px;
+    padding: 8px 13px;
     border-radius: 17px;
-    /* ปรับขนาดพอดีกับข้อความ: inline-block + max-width */
-    max-width: 80vw;
     word-break: break-word;
     box-shadow: 0 1px 5px #38b6ff22;
     font-size: 1em;
@@ -121,6 +121,7 @@ body {
     border-bottom-right-radius: 7px;
     color: #236b63;
     text-align: right;
+    margin-left: auto;
 }
 
 .message.bot {
@@ -129,6 +130,7 @@ body {
     border-bottom-left-radius: 7px;
     color: #205072;
     text-align: left;
+    margin-right: auto;
 }
 
 .chat-input-container {
