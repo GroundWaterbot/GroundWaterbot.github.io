@@ -7,23 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/728/728093.png">
-    <style>
-        #show-ranking-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 9px;
-        }
-        #show-ranking-btn img {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            background: #fff;
-            object-fit: cover;
-            box-shadow: 0 2px 6px #38b6ff22;
-        }
-        /* ... (style อื่น ๆ เหมือนเดิม, ให้อยู่ใน style.css ได้เลย) ... */
-    </style>
 </head>
 <body>
     <div class="header">
@@ -41,13 +24,14 @@
 
     <div class="main-container">
         <div class="illustration" style="text-align:center;margin-bottom:1.3em;">
-            <img src="https://cdn.pixabay.com/photo/2016/04/01/09/29/water-1298813_1280.png" alt="Groundwater" style="width:110px;border-radius:50%;border:3px solid #00cec9;box-shadow:0 2px 16px #00cec94d;">
+            <!-- เปลี่ยนภาพ groundwater เป็น unsplash (hotlink ได้) -->
+            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Groundwater"
+                 style="width:110px;border-radius:50%;border:3px solid #00cec9;box-shadow:0 2px 16px #00cec94d;">
             <div style="color:#0984e3;font-weight:600;margin-top:0.7em;">เรียนรู้เกี่ยวกับน้ำบาดาลและสิ่งแวดล้อม พร้อมสะสมคะแนน!</div>
         </div>
 
-        <!-- ปุ่มดูตารางคะแนน (เปลี่ยนเป็นรูปถ้วยรางวัล) -->
-        <button class="button" id="show-ranking-btn" style="margin: 0 auto 1em auto;display:flex;align-items:center;justify-content:center;gap:9px;">
-            <!-- เปลี่ยนเป็นไอคอนถ้วยรางวัล -->
+        <!-- ปุ่มดูตารางคะแนน (ไอคอนถ้วยรางวัล) -->
+        <button class="button" id="show-ranking-btn" style="margin: 0 auto 1em auto;">
             <img src="https://cdn-icons-png.flaticon.com/512/616/616554.png" alt="trophy" style="width:34px;border-radius:50%;background:#fff;object-fit:cover;box-shadow:0 2px 6px #38b6ff22;">
             <span>ดูตารางคะแนน</span>
         </button>
@@ -112,43 +96,6 @@
         </div>
     </div>
 
-    <script>
-    // ตัวอย่างข้อมูล ranking
-    const rankingData = [
-        { username: "JNPz", score: 130 },
-        { username: "Rainy", score: 100 },
-        { username: "Earth", score: 80 }
-    ];
-
-    // Render ตารางคะแนน
-    function renderRankingTable() {
-        const tableBody = document.getElementById('ranking-table-body');
-        tableBody.innerHTML = "";
-        rankingData.forEach((item, idx) => {
-            // ถ้วยรางวัล 🏆 เฉพาะอันดับ 1
-            let rankDisplay = idx === 0 ? '🏆' : (idx + 1);
-            tableBody.innerHTML += `
-            <tr>
-                <td>${rankDisplay}</td>
-                <td>${item.username}</td>
-                <td>${item.score}</td>
-            </tr>
-            `;
-        });
-    }
-
-    // Show/Hide ranking section
-    document.getElementById('show-ranking-btn').addEventListener('click', () => {
-        document.getElementById('ranking-section').style.display = 'block';
-        document.getElementById('ranking-table').style.display = 'table';
-        document.getElementById('ranking-loading').style.display = 'none';
-        renderRankingTable();
-    });
-    document.getElementById('close-ranking-btn').addEventListener('click', () => {
-        document.getElementById('ranking-section').style.display = 'none';
-        document.getElementById('ranking-loading').style.display = '';
-        document.getElementById('ranking-table').style.display = 'none';
-    });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

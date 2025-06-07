@@ -259,13 +259,32 @@ async function checkQuizAnswer(answer) {
     currentQuizQuestion = null;
 }
 
+// --- Modal Functions ---
+function openModal(mode) {
+    if (!authModal || !authForm || !authMessage || !modalTitle || !submitAuthBtn) return;
+    authModal.style.display = 'flex';
+    authMessage.textContent = '';
+    authForm.reset();
+    if (mode === 'login') {
+        modalTitle.textContent = 'เข้าสู่ระบบ';
+        submitAuthBtn.textContent = 'เข้าสู่ระบบ';
+    } else {
+        modalTitle.textContent = 'ลงทะเบียน';
+        submitAuthBtn.textContent = 'ลงทะเบียน';
+    }
+}
+
+function closeModal() {
+    if (authModal) authModal.style.display = 'none';
+}
+
 // --- Event Listeners ---
 document.addEventListener('DOMContentLoaded', () => {
     // โหลดสถานะผู้ใช้จาก Local Storage (ถ้ามี)
     const storedUser = localStorage.getItem('currentUser');
     const storedScore = localStorage.getItem('currentUserScore');
     const storedQuizAttempts = localStorage.getItem('quizAttemptsToday');
-    
+
     if (storedUser) {
         currentUser = storedUser;
         currentUserScore = parseInt(storedScore) || 0;
@@ -288,9 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (sendBtn) {
-        sendBtn.addEventListener('click', () => {
-            sendMessage();
-        });
+        sendBtn.addEventListener('click', sendMessage);
     }
     if (chatInput) {
         chatInput.addEventListener('keypress', (e) => {
@@ -300,28 +317,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (loginBtn) {
-        loginBtn.addEventListener('click', () => {
-            openModal('login');
-        });
-    }
-    if (registerBtn) {
-        registerBtn.addEventListener('click', () => {
-            openModal('register');
-        });
-    }
-    if (closeButton) {
-        closeButton.addEventListener('click', () => {
-            closeModal();
+    if (loginBtn) loginBtn.addEventListener('click', () => openModal('login'));
+    if (registerBtn) registerBtn.addEventListener('click', () => openModal('register'));
+    if (closeButton) closeButton.addEventListener('click', closeModal);
+
+    // คลิกนอก modal เพื่อปิด
+    if (authModal) {
+        window.addEventListener('click', (event) => {
+            if (event.target === authModal) closeModal();
         });
     }
 
-    window.addEventListener('click', (event) => {
-        if (event.target == authModal) {
-            closeModal();
-        }
-    });
-
+    // Login/Register Form
     if (authForm) {
         authForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -329,43 +336,56 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = authPasswordInput.value.trim();
             const formAction = submitAuthBtn.textContent === 'เข้าสู่ระบบ' ? 'login' : 'register';
 
+            // ป้องกัน submit ซ้ำ
+            if (!username || !password) {
+                authMessage.textContent = 'กรุณากรอกชื่อผู้ใช้และรหัสผ่าน';
+                authMessage.style.color = 'red';
+                return;
+            }
+
             authMessage.textContent = 'กำลังดำเนินการ...';
             authMessage.style.color = 'blue';
 
-            const passwordHash = await hashPassword(password);
+            try {
+                const passwordHash = await hashPassword(password);
+                const result = await fetchData(formAction, { username, password: passwordHash }, 'POST');
 
-            const result = await fetchData(formAction, { username, password: passwordHash }, 'POST');
+                if (result.success) {
+                    authMessage.style.color = 'green';
+                    authMessage.textContent = result.message;
+                    if (formAction === 'login') {
+                        currentUser = username;
+                        currentUserScore = result.score;
+                        quizAttemptsToday = result.quizAttemptsToday || 0;
 
-            if (result.success) {
-                authMessage.style.color = 'green';
-                authMessage.textContent = result.message;
-                if (formAction === 'login') {
-                    currentUser = username;
-                    currentUserScore = result.score;
-                    quizAttemptsToday = result.quizAttemptsToday || 0;
+                        localStorage.setItem('currentUser', currentUser);
+                        localStorage.setItem('currentUserScore', currentUserScore);
+                        localStorage.setItem('quizAttemptsToday', quizAttemptsToday);
 
-                    localStorage.setItem('currentUser', currentUser);
-                    localStorage.setItem('currentUserScore', currentUserScore);
-                    localStorage.setItem('quizAttemptsToday', quizAttemptsToday);
-
-                    updateUIForLoginStatus(true, currentUser);
-                    closeModal();
-                    appendMessage('bot', `<img src="https://cdn-icons-png.flaticon.com/512/3659/3659693.png" alt="bot" style="width:20px;vertical-align:middle;margin-right:7px;">สวัสดีค่ะ ${currentUser}! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล บาดาลมีข่าวสารประจำวันมาให้คุณฟังค่ะ:`);
-                    fetchData('getNews').then(res => {
-                        appendMessage('bot', res.news || 'ไม่สามารถโหลดข่าวได้ในขณะนี้');
-                    });
-                    appendMessage('bot', 'คุณสามารถพิมพ์ "เล่นเกม" เพื่อเริ่มเล่นเกมตอบคำถามน้ำบาดาล และสะสมแต้มได้เลยค่ะ!');
+                        updateUIForLoginStatus(true, currentUser);
+                        setTimeout(() => {
+                            closeModal();
+                        }, 600);
+                        appendMessage('bot', `<img src="https://cdn-icons-png.flaticon.com/512/3659/3659693.png" alt="bot" style="width:20px;vertical-align:middle;margin-right:7px;">สวัสดีค่ะ ${currentUser}! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล บาดาลมีข่าวสารประจำวันมาให้คุณฟังค่ะ:`);
+                        fetchData('getNews').then(res => {
+                            appendMessage('bot', res.news || 'ไม่สามารถโหลดข่าวได้ในขณะนี้');
+                        });
+                        appendMessage('bot', 'คุณสามารถพิมพ์ "เล่นเกม" เพื่อเริ่มเล่นเกมตอบคำถามน้ำบาดาล และสะสมแต้มได้เลยค่ะ!');
+                    } else {
+                        setTimeout(() => {
+                            modalTitle.textContent = 'เข้าสู่ระบบ';
+                            submitAuthBtn.textContent = 'เข้าสู่ระบบ';
+                            authMessage.textContent = '';
+                            authForm.reset();
+                        }, 1500);
+                    }
                 } else {
-                    setTimeout(() => {
-                        modalTitle.textContent = 'เข้าสู่ระบบ';
-                        submitAuthBtn.textContent = 'เข้าสู่ระบบ';
-                        authMessage.textContent = '';
-                        authForm.reset();
-                    }, 1500);
+                    authMessage.style.color = 'red';
+                    authMessage.textContent = result.message;
                 }
-            } else {
+            } catch (err) {
                 authMessage.style.color = 'red';
-                authMessage.textContent = result.message;
+                authMessage.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่';
             }
         });
     }
@@ -399,21 +419,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
-// --- Modal Functions ---
-function openModal(mode) {
-    authModal.style.display = 'flex';
-    authMessage.textContent = '';
-    authForm.reset();
-    if (mode === 'login') {
-        modalTitle.textContent = 'เข้าสู่ระบบ';
-        submitAuthBtn.textContent = 'เข้าสู่ระบบ';
-    } else {
-        modalTitle.textContent = 'ลงทะเบียน';
-        submitAuthBtn.textContent = 'ลงทะเบียน';
-    }
-}
-
-function closeModal() {
-    authModal.style.display = 'none';
-}
