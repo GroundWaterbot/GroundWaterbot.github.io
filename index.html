@@ -6,10 +6,12 @@
     <title>AI Chatbot น้ำบาดาล</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/728/728093.png">
 </head>
 <body>
     <div class="header">
-        <h1>AI Chatbot น้ำบาดาล</h1>
+        <img src="https://cdn-icons-png.flaticon.com/512/728/728093.png" alt="Water Icon" style="width:48px;vertical-align:middle;margin-right: 8px;box-shadow:0 4px 12px #38b6ff55;border-radius:50%;">
+        <h1 style="display:inline;font-size:2em;">AI Chatbot น้ำบาดาล</h1>
         <div class="auth-buttons">
             <button id="loginBtn">เข้าสู่ระบบ</button>
             <button id="registerBtn">ลงทะเบียน</button>
@@ -21,24 +23,63 @@
     </div>
 
     <div class="main-container">
+        <div class="illustration" style="text-align:center;margin-bottom:1.3em;">
+            <img src="https://cdn.pixabay.com/photo/2016/04/01/09/29/water-1298813_1280.png" alt="Groundwater" style="width:110px;border-radius:50%;border:3px solid #00cec9;box-shadow:0 2px 16px #00cec94d;">
+            <div style="color:#0984e3;font-weight:600;margin-top:0.7em;">เรียนรู้เกี่ยวกับน้ำบาดาลและสิ่งแวดล้อม พร้อมสะสมคะแนน!</div>
+        </div>
+
+        <!-- ปุ่มดูตารางคะแนน -->
+        <button class="button" id="show-ranking-btn" style="margin: 0 auto 1em auto;display:block;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="ranking" style="width:30px;vertical-align:middle;margin-right:7px;">
+            ดูตารางคะแนน
+        </button>
+        <div id="ranking-section" style="display:none;">
+            <h2 style="color:#00b894;text-align:center;margin-bottom:0.4em;">
+                <img src="https://cdn-icons-png.flaticon.com/512/616/616554.png" alt="trophy" style="width:28px;vertical-align:middle;margin-right:5px;">
+                ตารางคะแนน
+            </h2>
+            <div id="ranking-loading" style="text-align:center;">⏳ กำลังโหลด...</div>
+            <table id="ranking-table" style="width:100%;margin:1em 0;display:none;background:#f8fafb;border-radius:12px;overflow:hidden;">
+                <thead>
+                    <tr>
+                        <th>อันดับ</th>
+                        <th>ชื่อผู้ใช้</th>
+                        <th>คะแนน</th>
+                    </tr>
+                </thead>
+                <tbody id="ranking-table-body"></tbody>
+            </table>
+            <button class="button" style="background:#636e72;margin-top:0.3em;" id="close-ranking-btn">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828778.png" alt="close" style="width:22px;vertical-align:middle;margin-right:7px;">
+                ปิดตาราง
+            </button>
+        </div>
+
         <div class="chatbot-section" style="display: none;">
             <div id="chatbox" class="chatbox">
-                <div class="message bot">สวัสดีค่ะ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล</div>
-                <div class="message bot">กรุณาเข้าสู่ระบบ หรือลงทะเบียน เพื่อใช้งาน Chatbot และเล่นเกมสะสมแต้มค่ะ!</div>
+                <div class="message bot">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3659/3659693.png" alt="bot" style="width:23px;vertical-align:middle;margin-right:7px;"> 
+                    สวัสดีค่ะ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล
+                </div>
+                <div class="message bot">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3659/3659693.png" alt="bot" style="width:23px;vertical-align:middle;margin-right:7px;">
+                    กรุณาเข้าสู่ระบบ หรือลงทะเบียน เพื่อใช้งาน Chatbot และเล่นเกมสะสมแต้มค่ะ!
+                </div>
             </div>
             <div class="chat-input-container">
                 <input type="text" id="chatInput" placeholder="พิมพ์ข้อความที่นี่..." autocomplete="off">
-                <button id="sendBtn">ส่ง</button>
+                <button id="sendBtn">
+                    <img src="https://cdn-icons-png.flaticon.com/512/724/724715.png" alt="send" style="width:18px;vertical-align:middle;margin-right:3px;">
+                    ส่ง
+                </button>
             </div>
         </div>
-
-        <div class="ranking-section">
-            <h2>คะแนนผู้ใช้สูงสุด</h2>
-            <ul id="rankingList">
-                <li>กำลังโหลดอันดับ...</li>
-            </ul>
-        </div>
     </div>
+
+    <footer style="text-align:center;margin-top:2em;padding-bottom:1em;color:#3083d3;opacity:0.8;">
+        <img src="https://cdn-icons-png.flaticon.com/512/728/728093.png" alt="water" style="width:28px;vertical-align:middle;margin-right:3px;">
+        &copy; 2025 Groundwater Quiz Project | Designed for Education
+    </footer>
 
     <div id="authModal" class="modal">
         <div class="modal-content">

@@ -23,6 +23,8 @@ body {
     font-size: 1.6em;
     margin: 0;
     letter-spacing: 1px;
+    display: inline;
+    vertical-align: middle;
 }
 
 .auth-buttons {
@@ -79,6 +81,21 @@ body {
     margin: 0 auto;
 }
 
+.illustration img {
+    border: 4px solid #00cec9;
+    margin-bottom: 0.3em;
+    background: white;
+}
+
+.illustration {
+    animation: fadeIn 1.1s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
 .chatbot-section {
     background: #e3f6fc;
     border-radius: 18px;
@@ -113,6 +130,7 @@ body {
     word-break: break-word;
     box-shadow: 0 1px 5px #38b6ff22;
     font-size: 1em;
+    position: relative;
 }
 
 .message.user {
@@ -163,54 +181,84 @@ body {
     cursor: pointer;
     box-shadow: 0 1px 4px #38b6ff33;
     transition: background 0.18s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 #sendBtn:hover {
     background: linear-gradient(90deg, #47e6c1 0%, #38b6ff 100%);
 }
 
-.ranking-section {
+.button, #show-ranking-btn, #close-ranking-btn {
+    display: block;
+    width: 100%;
+    background: linear-gradient(90deg, #00b894, #00cec9);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 0.9em 0;
+    font-size: 1.15em;
+    font-weight: 700;
+    margin: 1.2em 0 1em 0;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.12);
+    transition: background .2s;
+}
+
+.button:hover, #show-ranking-btn:hover, #close-ranking-btn:hover {
+    background: linear-gradient(90deg, #00cec9, #00b894);
+}
+
+#ranking-section {
     background: #f7fdfd;
     border-radius: 14px;
     box-shadow: 0 2px 8px #8ed6ff30;
     padding: 17px 13px;
     width: 100%;
-    max-width: 340px;
-    margin: 0 auto;
+    max-width: 380px;
+    margin: 0 auto 1.5em auto;
     height: fit-content;
+    display: none;
+    animation: fadeIn 0.8s;
 }
 
-.ranking-section h2 {
-    color: #38b6ff;
-    margin: 0 0 10px 0;
-    border-bottom: 1px solid #cdefff;
-    padding-bottom: 7px;
-    font-size: 1.2em;
+#ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #f8fafb;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 1em 0 0 0;
+    font-size: 1em;
+    box-shadow: 0 2px 8px #38b6ff22;
+}
+
+#ranking-table th, #ranking-table td {
+    border: 1px solid #cdefff;
+    padding: 0.7em 0.3em;
+    text-align: center;
+}
+
+#ranking-table th {
+    background: #38b6ff;
+    color: white;
     font-weight: bold;
 }
 
-#rankingList {
-    list-style: none;
-    padding: 0;
-    max-height: 230px;
-    overflow-y: auto;
+#ranking-table tr:nth-child(odd) {
+    background: #e3f6fc;
 }
 
-#rankingList li {
-    background: linear-gradient(90deg, #e3f6fc 0%, #f7fdff 100%);
-    padding: 9px 11px;
-    margin-bottom: 7px;
-    border-radius: 6px;
-    font-size: 0.98em;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid #cdefff;
-    color: #22546c;
+#ranking-table tr:nth-child(even) {
+    background: #f7fdff;
 }
 
-#rankingList li:nth-child(odd) {
-    background: linear-gradient(90deg, #f7fdff 0%, #e3f6fc 100%);
+#ranking-loading {
+    color: #47b8e0;
+    font-weight: bold;
+    margin-bottom: 1em;
+    font-size: 1.05em;
 }
 
 .modal {
@@ -298,23 +346,34 @@ body {
     color: #e74c3c;
 }
 
-@media (min-width: 600px) {
+footer {
+    background: none;
+    color: #3083d3;
+    font-size: 1.07em;
+    padding: 0.7em 0 0.5em 0;
+    margin-top: 3em;
+    opacity: 0.85;
+}
+
+@media (max-width: 600px) {
     .main-container {
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: center;
-        gap: 28px;
-        padding: 28px 0 0 0;
-        max-width: 1000px;
+        max-width: 99vw;
+        padding: 0.6rem 0.2rem 1.3rem 0.2rem;
     }
     .chatbot-section {
-        height: 74vh;
-        min-height: 400px;
-        max-height: 80vh;
+        height: auto;
+        min-height: 220px;
+        max-height: unset;
     }
-    .ranking-section {
-        min-width: 240px;
-        margin: 0;
-        max-width: 340px;
+    #chatbox, .chatbox {
+        max-height: 200px;
+        min-height: 120px;
+    }
+    #ranking-section {
+        max-width: 99vw;
+        padding: 1em 0.3em;
+    }
+    #ranking-table {
+        font-size: 0.95em;
     }
 }
