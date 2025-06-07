@@ -24,15 +24,14 @@
 
     <div class="main-container">
         <div class="illustration" style="text-align:center;margin-bottom:1.3em;">
-            <!-- เปลี่ยนภาพ groundwater เป็น unsplash (hotlink ได้) -->
             <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Groundwater"
                  style="width:110px;border-radius:50%;border:3px solid #00cec9;box-shadow:0 2px 16px #00cec94d;">
             <div style="color:#0984e3;font-weight:600;margin-top:0.7em;">เรียนรู้เกี่ยวกับน้ำบาดาลและสิ่งแวดล้อม พร้อมสะสมคะแนน!</div>
         </div>
 
-        <!-- ปุ่มดูตารางคะแนน (ไอคอนถ้วยรางวัล) -->
-        <button class="button" id="show-ranking-btn" style="margin: 0 auto 1em auto;">
-            <img src="https://cdn-icons-png.flaticon.com/512/616/616554.png" alt="trophy" style="width:34px;border-radius:50%;background:#fff;object-fit:cover;box-shadow:0 2px 6px #38b6ff22;">
+        <!-- ปุ่มดูตารางคะแนน (เปลี่ยนเป็นอิโมจิโลก) -->
+        <button class="button" id="show-ranking-btn" style="margin: 0 auto 1em auto; display: flex; align-items: center; justify-content: center; gap: 9px;">
+            <span style="font-size: 1.6em;">🌏</span>
             <span>ดูตารางคะแนน</span>
         </button>
         <div id="ranking-section" style="display:none;">
@@ -57,12 +56,7 @@
 
         <div class="chatbot-section" style="display: none;">
             <div id="chatbox" class="chatbox">
-                <div class="message bot">
-                    บาดาลมีข่าวสารประจำวันมาให้คุณฟังค่ะ: ขออภัยค่ะ! ไม่พบข่าวน้ำบาดาลหรือข่าวสิ่งแวดล้อมล่าสุดในขณะนี้
-                </div>
-                <div class="message bot">
-                    คุณสามารถพิมพ์ "เล่นเกม" เพื่อเริ่มเล่นเกมตอบคำถามน้ำบาดาล และสะสมแต้มได้เลยค่ะ!
-                </div>
+                <!-- ไม่มีข้อความต้อนรับหรือแนะนำใดๆ แล้ว -->
             </div>
             <div class="chat-input-container">
                 <input type="text" id="chatInput" placeholder="พิมพ์ข้อความที่นี่..." autocomplete="off">

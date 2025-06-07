@@ -1,4 +1,4 @@
-// ---- ฟังก์ชัน hashPassword ไว้ด้านบนสุด ----
+// ---- ฟังก์ชัน hashPassword ----
 async function hashPassword(password) {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
@@ -30,8 +30,6 @@ const authUsernameInput = document.getElementById('authUsername');
 const authPasswordInput = document.getElementById('authPassword');
 const submitAuthBtn = document.getElementById('submitAuthBtn');
 const authMessage = document.getElementById('authMessage');
-
-// สำหรับตารางคะแนน
 const showRankingBtn = document.getElementById('show-ranking-btn');
 const closeRankingBtn = document.getElementById('close-ranking-btn');
 const rankingSection = document.getElementById('ranking-section');
@@ -48,7 +46,7 @@ let currentQuizQuestion = null;
 function appendMessage(sender, text) {
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message', sender);
-    messageDiv.innerHTML = text;
+    messageDiv.innerText = text; // ใช้ innerText ป้องกัน HTML/CSS แปลกปลอม
     if (chatbox) {
         chatbox.appendChild(messageDiv);
         chatbox.scrollTop = chatbox.scrollHeight;
@@ -61,15 +59,11 @@ async function fetchData(action, params = {}, method = 'GET') {
 
     if (method === 'GET') {
         url.searchParams.append('action', action);
-        for (const key in params) {
-            url.searchParams.append(key, params[key]);
-        }
+        for (const key in params) url.searchParams.append(key, params[key]);
     } else if (method === 'POST') {
         body = new URLSearchParams();
         body.append('action', action);
-        for (const key in params) {
-            body.append(key, params[key]);
-        }
+        for (const key in params) body.append(key, params[key]);
     }
 
     try {
@@ -78,7 +72,6 @@ async function fetchData(action, params = {}, method = 'GET') {
             fetchOptions.headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
             fetchOptions.body = body;
         }
-
         const response = await fetch(url.toString(), fetchOptions);
         if (!response.ok) {
             const errorText = await response.text();
@@ -98,14 +91,14 @@ function updateUIForLoginStatus(isLoggedIn, username = '') {
         registerBtn.style.display = 'none';
         logoutBtn.style.display = 'inline-block';
         userInfo.style.display = 'inline-block';
-        loggedInUserSpan.textContent = `ยินดีต้อนรับ, ${username}! (คะแนน: ${currentUserScore})`;
+        loggedInUserSpan.innerText = `ยินดีต้อนรับ, ${username}! (คะแนน: ${currentUserScore})`;
         chatbotSection.style.display = 'block';
     } else {
         loginBtn.style.display = 'inline-block';
         registerBtn.style.display = 'inline-block';
         logoutBtn.style.display = 'none';
         userInfo.style.display = 'none';
-        loggedInUserSpan.textContent = '';
+        loggedInUserSpan.innerText = '';
         chatbotSection.style.display = 'none';
     }
 }
@@ -114,17 +107,13 @@ async function updateRankingTable() {
     rankingTableBody.innerHTML = '';
     rankingTable.style.display = 'none';
     rankingLoading.style.display = 'block';
-    rankingLoading.textContent = '⏳ กำลังโหลด...';
+    rankingLoading.innerText = '⏳ กำลังโหลด...';
     const result = await fetchData('getRanking');
     if (result.success && result.ranking && result.ranking.length > 0) {
         result.ranking.forEach((user, index) => {
             let icon = '';
             if (index === 0) {
-                icon = `<img src="https://cdn-icons-png.flaticon.com/512/2583/2583346.png" alt="gold" style="width:22px;vertical-align:middle;margin-right:2px;">`;
-            } else if (index === 1) {
-                icon = `<img src="https://cdn-icons-png.flaticon.com/512/2583/2583349.png" alt="silver" style="width:22px;vertical-align:middle;margin-right:2px;">`;
-            } else if (index === 2) {
-                icon = `<img src="https://cdn-icons-png.flaticon.com/512/2583/2583351.png" alt="bronze" style="width:22px;vertical-align:middle;margin-right:2px;">`;
+                icon = `🏆 `;
             }
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -137,7 +126,7 @@ async function updateRankingTable() {
         rankingTable.style.display = 'table';
         rankingLoading.style.display = 'none';
     } else {
-        rankingLoading.textContent = 'ไม่พบข้อมูลคะแนน';
+        rankingLoading.innerText = 'ไม่พบข้อมูลคะแนน';
         rankingTable.style.display = 'none';
     }
 }
@@ -148,7 +137,7 @@ async function sendMessage() {
     if (!message) return;
 
     if (!currentUser) {
-        appendMessage('bot', 'คุณต้องเข้าสู่ระบบก่อนจึงจะคุยกับ Chatbot ได้ค่ะ');
+        appendMessage('bot', 'กรุณาเข้าสู่ระบบก่อนใช้งาน');
         chatInput.value = '';
         return;
     }
@@ -170,7 +159,7 @@ async function sendMessage() {
     // กำลังพิมพ์...
     const thinkingMessageDiv = document.createElement('div');
     thinkingMessageDiv.classList.add('message', 'bot');
-    thinkingMessageDiv.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/512/3659/3659693.png" alt="bot" style="width:20px;vertical-align:middle;margin-right:7px;">กำลังพิมพ์...';
+    thinkingMessageDiv.innerText = 'กำลังพิมพ์...';
     if (chatbox) {
         chatbox.appendChild(thinkingMessageDiv);
         chatbox.scrollTop = chatbox.scrollHeight;
@@ -182,38 +171,34 @@ async function sendMessage() {
             user_content: message 
         }, 'POST');
 
-        if (thinkingMessageDiv.parentNode) {
-            thinkingMessageDiv.remove();
-        }
+        if (thinkingMessageDiv.parentNode) thinkingMessageDiv.remove();
 
         if (result.success) {
-            appendMessage('bot', `<img src="https://cdn-icons-png.flaticon.com/512/3659/3659693.png" alt="bot" style="width:20px;vertical-align:middle;margin-right:7px;">${result.message}`);
+            appendMessage('bot', result.message);
         } else {
-            appendMessage('bot', `<img src="https://cdn-icons-png.flaticon.com/512/3659/3659693.png" alt="bot" style="width:20px;vertical-align:middle;margin-right:7px;">บอทตอบกลับผิดพลาด: ${result.message}`);
+            appendMessage('bot', `บอทตอบกลับผิดพลาด: ${result.message}`);
         }
     } catch (error) {
-        if (thinkingMessageDiv.parentNode) {
-            thinkingMessageDiv.remove();
-        }
+        if (thinkingMessageDiv.parentNode) thinkingMessageDiv.remove();
         appendMessage('bot', "เกิดข้อผิดพลาดในการเชื่อมต่อกับบอท");
     }
 }
 
 async function startQuiz() {
     if (!currentUser) {
-        appendMessage('bot', 'คุณต้องเข้าสู่ระบบก่อนจึงจะเล่นเกมได้ค่ะ');
+        appendMessage('bot', 'กรุณาเข้าสู่ระบบก่อนเล่นเกม');
         return;
     }
     if (quizAttemptsToday >= QUIZ_ATTEMPTS_PER_DAY) {
         appendMessage('bot', `วันนี้คุณตอบคำถามครบ ${QUIZ_ATTEMPTS_PER_DAY} ครั้งแล้ว ลองมาใหม่พรุ่งนี้นะ!`);
         return;
     }
-    appendMessage('bot', '<img src="https://cdn-icons-png.flaticon.com/512/616/616554.png" alt="quiz" style="width:22px;vertical-align:middle;margin-right:7px;">มาเล่นเกมตอบคำถามน้ำบาดาลกัน! โปรดรอสักครู่...');
+    appendMessage('bot', 'มาเล่นเกมตอบคำถามน้ำบาดาลกัน! โปรดรอสักครู่...');
     const result = await fetchData('getQuizQuestion');
     if (result.success) {
         currentQuizQuestion = result;
-        const optionsHtml = result.options.map((opt, index) => `${index + 1}. ${opt}`).join('<br>');
-        appendMessage('bot', `คำถาม: ${result.question}<br>ตัวเลือก:<br>${optionsHtml}<br>พิมพ์หมายเลขคำตอบที่ถูกต้อง`);
+        const optionsText = result.options.map((opt, index) => `${index + 1}. ${opt}`).join('\n');
+        appendMessage('bot', `คำถาม: ${result.question}\nตัวเลือก:\n${optionsText}\nพิมพ์หมายเลขคำตอบที่ถูกต้อง`);
     } else {
         appendMessage('bot', `ไม่สามารถดึงคำถามได้: ${result.message}`);
         currentQuizQuestion = null;
@@ -235,10 +220,10 @@ async function checkQuizAnswer(answer) {
     let scoreChange = 0;
     if (chosenAnswer === currentQuizQuestion.correctAnswer) {
         scoreChange = 10;
-        messageToDisplay = `<img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="correct" style="width:19px;vertical-align:middle;margin-right:7px;">เก่งมากเลย! คุณตอบถูกคะ! (+${scoreChange} แต้ม)`;
+        messageToDisplay = `เก่งมากเลย! คุณตอบถูกค่ะ! (+${scoreChange} แต้ม)`;
     } else {
         scoreChange = -5;
-        messageToDisplay = `<img src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png" alt="wrong" style="width:19px;vertical-align:middle;margin-right:7px;">เสียใจด้วยค่ะ! คุณตอบผิด คำตอบที่ถูกต้องคือ "${currentQuizQuestion.correctAnswer}" (${scoreChange} แต้ม)`;
+        messageToDisplay = `เสียใจด้วยค่ะ! คุณตอบผิด คำตอบที่ถูกต้องคือ "${currentQuizQuestion.correctAnswer}" (${scoreChange} แต้ม)`;
     }
     appendMessage('bot', messageToDisplay);
 
@@ -250,7 +235,7 @@ async function checkQuizAnswer(answer) {
     if (updateResult.success) {
         currentUserScore = updateResult.newScore;
         quizAttemptsToday++;
-        loggedInUserSpan.textContent = `ยินดีต้อนรับ, ${currentUser}! (คะแนน: ${currentUserScore})`;
+        loggedInUserSpan.innerText = `ยินดีต้อนรับ, ${currentUser}! (คะแนน: ${currentUserScore})`;
         appendMessage('bot', `ตอนนี้คุณมี ${currentUserScore} แต้มแล้ว (ตอบไปแล้ว ${quizAttemptsToday} ครั้ง / ${QUIZ_ATTEMPTS_PER_DAY} ครั้งต่อวัน)`);
     } else {
         appendMessage('bot', `เกิดข้อผิดพลาดในการอัปเดตคะแนน: ${updateResult.message}`);
@@ -290,45 +275,22 @@ document.addEventListener('DOMContentLoaded', () => {
         currentUserScore = parseInt(storedScore) || 0;
         quizAttemptsToday = parseInt(storedQuizAttempts) || 0;
         updateUIForLoginStatus(true, currentUser);
-        appendMessage('bot', `<img src="https://cdn-icons-png.flaticon.com/512/3659/3659693.png" alt="bot" style="width:20px;vertical-align:middle;margin-right:7px;">สวัสดีค่ะ ${currentUser}! ยินดีต้อนรับกลับสู่ AI Chatbot น้ำบาดาล`);
-        appendMessage('bot', `ตอนนี้คุณมี ${currentUserScore} แต้ม (ตอบไปแล้ว ${quizAttemptsToday} ครั้ง / ${QUIZ_ATTEMPTS_PER_DAY} ครั้งต่อวัน)`);
-        fetchData('getNews').then(res => {
-            if (res.success && res.news) {
-                appendMessage('bot', `<img src="https://cdn-icons-png.flaticon.com/512/3135/3135906.png" alt="news" style="width:21px;vertical-align:middle;margin-right:7px;">บาดาลมีข่าวสารประจำวันมาให้คุณฟังค่ะ: ${res.news}`);
-            } else {
-                appendMessage('bot', 'ไม่สามารถโหลดข่าวได้ในขณะนี้');
-            }
-            appendMessage('bot', 'คุณสามารถพิมพ์ "เล่นเกม" เพื่อเริ่มเล่นเกมตอบคำถามน้ำบาดาล และสะสมแต้มได้เลยค่ะ!');
-        });
     } else {
         updateUIForLoginStatus(false);
-        appendMessage('bot', '<img src="https://cdn-icons-png.flaticon.com/512/3659/3659693.png" alt="bot" style="width:20px;vertical-align:middle;margin-right:7px;">สวัสดีค่ะ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล');
-        appendMessage('bot', '<img src="https://cdn-icons-png.flaticon.com/512/3659/3659693.png" alt="bot" style="width:20px;vertical-align:middle;margin-right:7px;">กรุณาเข้าสู่ระบบ หรือลงทะเบียน เพื่อใช้งาน Chatbot และเล่นเกมสะสมแต้มค่ะ!');
     }
 
-    if (sendBtn) {
-        sendBtn.addEventListener('click', sendMessage);
-    }
-    if (chatInput) {
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-    }
-
+    if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+    if (chatInput) chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
     if (loginBtn) loginBtn.addEventListener('click', () => openModal('login'));
     if (registerBtn) registerBtn.addEventListener('click', () => openModal('register'));
     if (closeButton) closeButton.addEventListener('click', closeModal);
-
-    // คลิกนอก modal เพื่อปิด
     if (authModal) {
         window.addEventListener('click', (event) => {
             if (event.target === authModal) closeModal();
         });
     }
-
-    // Login/Register Form
     if (authForm) {
         authForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -336,7 +298,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = authPasswordInput.value.trim();
             const formAction = submitAuthBtn.textContent === 'เข้าสู่ระบบ' ? 'login' : 'register';
 
-            // ป้องกัน submit ซ้ำ
             if (!username || !password) {
                 authMessage.textContent = 'กรุณากรอกชื่อผู้ใช้และรหัสผ่าน';
                 authMessage.style.color = 'red';
@@ -366,11 +327,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         setTimeout(() => {
                             closeModal();
                         }, 600);
-                        appendMessage('bot', `<img src="https://cdn-icons-png.flaticon.com/512/3659/3659693.png" alt="bot" style="width:20px;vertical-align:middle;margin-right:7px;">สวัสดีค่ะ ${currentUser}! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล บาดาลมีข่าวสารประจำวันมาให้คุณฟังค่ะ:`);
-                        fetchData('getNews').then(res => {
-                            appendMessage('bot', res.news || 'ไม่สามารถโหลดข่าวได้ในขณะนี้');
-                        });
-                        appendMessage('bot', 'คุณสามารถพิมพ์ "เล่นเกม" เพื่อเริ่มเล่นเกมตอบคำถามน้ำบาดาล และสะสมแต้มได้เลยค่ะ!');
                     } else {
                         setTimeout(() => {
                             modalTitle.textContent = 'เข้าสู่ระบบ';
@@ -390,23 +346,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            currentUser = null;
-            currentUserScore = 0;
-            quizAttemptsToday = 0;
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('currentUserScore');
-            localStorage.removeItem('quizAttemptsToday');
-            updateUIForLoginStatus(false);
-            appendMessage('bot', '<img src="https://cdn-icons-png.flaticon.com/512/3659/3659693.png" alt="bot" style="width:20px;vertical-align:middle;margin-right:7px;">คุณได้ออกจากระบบแล้วค่ะ');
-            if (chatbox) {
-                chatbox.innerHTML = '<div class="message bot"><img src="https://cdn-icons-png.flaticon.com/512/3659/3659693.png" alt="bot" style="width:20px;vertical-align:middle;margin-right:7px;">สวัสดีค่ะ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล</div>';
-            }
-        });
-    }
+    if (logoutBtn) logoutBtn.addEventListener('click', () => {
+        currentUser = null;
+        currentUserScore = 0;
+        quizAttemptsToday = 0;
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('currentUserScore');
+        localStorage.removeItem('quizAttemptsToday');
+        updateUIForLoginStatus(false);
+        if (chatbox) {
+            chatbox.innerHTML = '';
+        }
+    });
 
-    // ---- ปุ่มดู/ปิดตารางคะแนน ----
     if (showRankingBtn && closeRankingBtn && rankingSection) {
         showRankingBtn.addEventListener('click', () => {
             rankingSection.style.display = 'block';
