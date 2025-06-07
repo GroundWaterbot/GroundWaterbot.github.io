@@ -46,7 +46,7 @@ let currentQuizQuestion = null;
 function appendMessage(sender, text) {
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message', sender);
-    messageDiv.innerText = text; // ใช้ innerText ป้องกัน HTML/CSS แปลกปลอม
+    messageDiv.innerText = text; // ป้องกัน HTML/CSS แปลกปลอม
     if (chatbox) {
         chatbox.appendChild(messageDiv);
         chatbox.scrollTop = chatbox.scrollHeight;
@@ -275,8 +275,28 @@ document.addEventListener('DOMContentLoaded', () => {
         currentUserScore = parseInt(storedScore) || 0;
         quizAttemptsToday = parseInt(storedQuizAttempts) || 0;
         updateUIForLoginStatus(true, currentUser);
+
+        // --- เพิ่มข้อความแนะนำเกมและข่าวน้ำบาดาล ---
+        appendMessage('bot', 'พิมพ์ "เล่นเกม" เพื่อทดสอบความรู้เกี่ยวกับน้ำบาดาลและสะสมแต้ม!');
+        fetchData('getNews').then(res => {
+            if (res.success && res.news) {
+                appendMessage('bot', `ข่าวน้ำบาดาลล่าสุด: ${res.news}`);
+            } else {
+                appendMessage('bot', 'ขณะนี้ไม่มีข่าวน้ำบาดาลหรือสิ่งแวดล้อมล่าสุด');
+            }
+        });
     } else {
         updateUIForLoginStatus(false);
+
+        // --- เพิ่มข้อความแนะนำเกมและข่าวน้ำบาดาล ---
+        appendMessage('bot', 'พิมพ์ "เล่นเกม" เพื่อทดสอบความรู้เกี่ยวกับน้ำบาดาลและสะสมแต้ม!');
+        fetchData('getNews').then(res => {
+            if (res.success && res.news) {
+                appendMessage('bot', `ข่าวน้ำบาดาลล่าสุด: ${res.news}`);
+            } else {
+                appendMessage('bot', 'ขณะนี้ไม่มีข่าวน้ำบาดาลหรือสิ่งแวดล้อมล่าสุด');
+            }
+        });
     }
 
     if (sendBtn) sendBtn.addEventListener('click', sendMessage);
@@ -324,9 +344,21 @@ document.addEventListener('DOMContentLoaded', () => {
                         localStorage.setItem('quizAttemptsToday', quizAttemptsToday);
 
                         updateUIForLoginStatus(true, currentUser);
+
                         setTimeout(() => {
                             closeModal();
                         }, 600);
+
+                        // --- เพิ่มข้อความแนะนำเกมและข่าวน้ำบาดาล หลัง login สำเร็จ ---
+                        appendMessage('bot', 'พิมพ์ "เล่นเกม" เพื่อทดสอบความรู้เกี่ยวกับน้ำบาดาลและสะสมแต้ม!');
+                        fetchData('getNews').then(res => {
+                            if (res.success && res.news) {
+                                appendMessage('bot', `ข่าวน้ำบาดาลล่าสุด: ${res.news}`);
+                            } else {
+                                appendMessage('bot', 'ขณะนี้ไม่มีข่าวน้ำบาดาลหรือสิ่งแวดล้อมล่าสุด');
+                            }
+                        });
+
                     } else {
                         setTimeout(() => {
                             modalTitle.textContent = 'เข้าสู่ระบบ';
@@ -354,9 +386,16 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('currentUserScore');
         localStorage.removeItem('quizAttemptsToday');
         updateUIForLoginStatus(false);
-        if (chatbox) {
-            chatbox.innerHTML = '';
-        }
+        if (chatbox) chatbox.innerHTML = '';
+        // --- เพิ่มข้อความแนะนำเกมและข่าวน้ำบาดาล หลัง logout ---
+        appendMessage('bot', 'พิมพ์ "เล่นเกม" เพื่อทดสอบความรู้เกี่ยวกับน้ำบาดาลและสะสมแต้ม!');
+        fetchData('getNews').then(res => {
+            if (res.success && res.news) {
+                appendMessage('bot', `ข่าวน้ำบาดาลล่าสุด: ${res.news}`);
+            } else {
+                appendMessage('bot', 'ขณะนี้ไม่มีข่าวน้ำบาดาลหรือสิ่งแวดล้อมล่าสุด');
+            }
+        });
     });
 
     if (showRankingBtn && closeRankingBtn && rankingSection) {
