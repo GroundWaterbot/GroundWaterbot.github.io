@@ -7,6 +7,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/728/728093.png">
+    <style>
+        /* ... (คง style เดิมทั้งหมด ยกเว้นเพิ่ม/เปลี่ยนบางส่วนด้านล่าง) ... */
+        #show-ranking-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+        }
+        #show-ranking-btn img {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #fff;
+            object-fit: cover;
+            box-shadow: 0 2px 6px #38b6ff22;
+        }
+        /* ... (style อื่น ๆ เหมือนเดิม) ... */
+    </style>
 </head>
 <body>
     <div class="header">
@@ -28,18 +46,17 @@
             <div style="color:#0984e3;font-weight:600;margin-top:0.7em;">เรียนรู้เกี่ยวกับน้ำบาดาลและสิ่งแวดล้อม พร้อมสะสมคะแนน!</div>
         </div>
 
-        <!-- ปุ่มดูตารางคะแนน -->
-        <button class="button" id="show-ranking-btn" style="margin: 0 auto 1em auto;display:block;">
-            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="ranking" style="width:30px;vertical-align:middle;margin-right:7px;">
-            ดูตารางคะแนน
+        <!-- ปุ่มดูตารางคะแนน (เปลี่ยนเป็นรูปถ้วยรางวัล) -->
+        <button class="button" id="show-ranking-btn" style="margin: 0 auto 1em auto;display:flex;align-items:center;justify-content:center;gap:9px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/616/616554.png" alt="trophy" style="width:34px;border-radius:50%;background:#fff;object-fit:cover;box-shadow:0 2px 6px #38b6ff22;">
+            <span>ดูตารางคะแนน</span>
         </button>
         <div id="ranking-section" style="display:none;">
-            <h2 style="color:#00b894;text-align:center;margin-bottom:0.4em;">
-                <img src="https://cdn-icons-png.flaticon.com/512/616/616554.png" alt="trophy" style="width:28px;vertical-align:middle;margin-right:5px;">
-                ตารางคะแนน
+            <h2 style="color:#00b894;text-align:center;margin-bottom:0.4em;font-size:1.05em;">
+                🏆 ตารางคะแนน
             </h2>
-            <div id="ranking-loading" style="text-align:center;">⏳ กำลังโหลด...</div>
-            <table id="ranking-table" style="width:100%;margin:1em 0;display:none;background:#f8fafb;border-radius:12px;overflow:hidden;">
+            <div id="ranking-loading" style="text-align:center;font-size:0.97em;">⏳ กำลังโหลด...</div>
+            <table id="ranking-table" style="width:100%;margin:1em 0;display:none;background:#f8fafb;border-radius:12px;overflow:hidden;font-size:0.99em;">
                 <thead>
                     <tr>
                         <th>อันดับ</th>
@@ -49,8 +66,7 @@
                 </thead>
                 <tbody id="ranking-table-body"></tbody>
             </table>
-            <button class="button" style="background:#636e72;margin-top:0.3em;" id="close-ranking-btn">
-                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828778.png" alt="close" style="width:22px;vertical-align:middle;margin-right:7px;">
+            <button class="button" style="background:#636e72;margin-top:0.3em;font-size:0.93em;padding:0.6em 0;" id="close-ranking-btn">
                 ปิดตาราง
             </button>
         </div>
@@ -58,27 +74,23 @@
         <div class="chatbot-section" style="display: none;">
             <div id="chatbox" class="chatbox">
                 <div class="message bot">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3659/3659693.png" alt="bot" style="width:23px;vertical-align:middle;margin-right:7px;"> 
-                    สวัสดีค่ะ! ยินดีต้อนรับสู่ AI Chatbot น้ำบาดาล
+                    บาดาลมีข่าวสารประจำวันมาให้คุณฟังค่ะ: ขออภัยค่ะ! ไม่พบข่าวน้ำบาดาลหรือข่าวสิ่งแวดล้อมล่าสุดในขณะนี้
                 </div>
                 <div class="message bot">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3659/3659693.png" alt="bot" style="width:23px;vertical-align:middle;margin-right:7px;">
-                    กรุณาเข้าสู่ระบบ หรือลงทะเบียน เพื่อใช้งาน Chatbot และเล่นเกมสะสมแต้มค่ะ!
+                    คุณสามารถพิมพ์ "เล่นเกม" เพื่อเริ่มเล่นเกมตอบคำถามน้ำบาดาล และสะสมแต้มได้เลยค่ะ!
                 </div>
             </div>
             <div class="chat-input-container">
                 <input type="text" id="chatInput" placeholder="พิมพ์ข้อความที่นี่..." autocomplete="off">
-                <button id="sendBtn">
-                    <img src="https://cdn-icons-png.flaticon.com/512/724/724715.png" alt="send" style="width:18px;vertical-align:middle;margin-right:3px;">
+                <button id="sendBtn" style="font-size:1em;padding:10px 14px;">
                     ส่ง
                 </button>
             </div>
         </div>
     </div>
 
-    <footer style="text-align:center;margin-top:2em;padding-bottom:1em;color:#3083d3;opacity:0.8;">
-        <img src="https://cdn-icons-png.flaticon.com/512/728/728093.png" alt="water" style="width:28px;vertical-align:middle;margin-right:3px;">
-        &copy; 2025 Groundwater Quiz Project | Designed for Education
+    <footer style="text-align:center;margin-top:2em;padding-bottom:1em;color:#3083d3;opacity:0.8;font-size:0.92em;">
+        &copy; 2025 Badaan AI-chatbot | By ANUN BADAAN
     </footer>
 
     <div id="authModal" class="modal">
@@ -100,6 +112,43 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+    // ตัวอย่างข้อมูล ranking
+    const rankingData = [
+        { username: "JNPz", score: 130 },
+        { username: "Rainy", score: 100 },
+        { username: "Earth", score: 80 }
+    ];
+
+    // Render ตารางคะแนน
+    function renderRankingTable() {
+        const tableBody = document.getElementById('ranking-table-body');
+        tableBody.innerHTML = "";
+        rankingData.forEach((item, idx) => {
+            // ถ้วยรางวัล 🏆 เฉพาะอันดับ 1
+            let rankDisplay = idx === 0 ? '🏆' : (idx + 1);
+            tableBody.innerHTML += `
+            <tr>
+                <td>${rankDisplay}</td>
+                <td>${item.username}</td>
+                <td>${item.score}</td>
+            </tr>
+            `;
+        });
+    }
+
+    // Show/Hide ranking section
+    document.getElementById('show-ranking-btn').addEventListener('click', () => {
+        document.getElementById('ranking-section').style.display = 'block';
+        document.getElementById('ranking-table').style.display = 'table';
+        document.getElementById('ranking-loading').style.display = 'none';
+        renderRankingTable();
+    });
+    document.getElementById('close-ranking-btn').addEventListener('click', () => {
+        document.getElementById('ranking-section').style.display = 'none';
+        document.getElementById('ranking-loading').style.display = '';
+        document.getElementById('ranking-table').style.display = 'none';
+    });
+    </script>
 </body>
 </html>
