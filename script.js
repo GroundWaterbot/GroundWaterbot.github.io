@@ -43,15 +43,31 @@ let quizAttemptsToday = 0;
 let currentQuizQuestion = null;
 
 // --- Helper Functions ---
+// ...[โค้ดข้างบนเหมือนเดิม]...
+
 function appendMessage(sender, text) {
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message', sender);
-    messageDiv.innerText = text;
+
+    // ถ้าเป็น bot และมี tag HTML (มี "<a" หรือ "<ul" หรือ "<ol") ให้ render เป็น HTML
+    if (
+        sender === 'bot' && (
+            text.includes('<a') || text.includes('<ul') || text.includes('<ol') || text.includes('<b') || text.includes('<br')
+        )
+    ) {
+        messageDiv.classList.add('news-message'); // เพิ่ม class สำหรับข่าว
+        messageDiv.innerHTML = text;
+    } else {
+        messageDiv.innerText = text;
+    }
+
     if (chatbox) {
         chatbox.appendChild(messageDiv);
         chatbox.scrollTop = chatbox.scrollHeight;
     }
 }
+
+// ...[โค้ดข้างล่างเหมือนเดิม]...
 
 // ป้องกันข้อความแนะนำซ้ำซ้อน
 function showIntroMessages() {
