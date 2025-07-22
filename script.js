@@ -42,8 +42,28 @@ let currentUserScore = 0;
 let quizAttemptsToday = 0;
 let currentQuizQuestion = null;
 
+// ========== Streak Feature ==========
+// เรียก API เพื่ออัปเดต streak ทุกครั้งที่ผู้ใช้ส่งข้อความ
+async function updateAndShowStreak() {
+    if (!currentUser) return;
+    const res = await fetchData('updateStreakOnChat', { username: currentUser }, 'POST');
+    if (res.success) {
+        localStorage.setItem('streak', res.streak);
+        localStorage.setItem('highestStreak', res.highestStreak);
+        localStorage.setItem('chattedToday', res.chattedToday ? '1' : '0');
+        showStreakUI(res.streak, res.chattedToday);
+    }
+}
+
+// แสดงผล streak หลังชื่อผู้ใช้
+function showStreakUI(streak, chattedToday) {
+    if (!loggedInUserSpan) return;
+    let streakIcon = chattedToday ? '💧' : '<span style="filter: grayscale(1);opacity:0.4;">💧</span>';
+    loggedInUserSpan.innerHTML = `ยินดีต้อนรับ, ${currentUser}! (คะแนน: ${currentUserScore}) ${streakIcon}${streak}`;
+}
+// ========== จบ Streak Feature ==========
+
 // --- Helper Functions ---
-// ...[โค้ดข้างบนเหมือนเดิม]...
 
 function appendMessage(sender, text) {
     const messageDiv = document.createElement('div');
@@ -66,8 +86,6 @@ function appendMessage(sender, text) {
         chatbox.scrollTop = chatbox.scrollHeight;
     }
 }
-
-// ...[โค้ดข้างล่างเหมือนเดิม]...
 
 // ป้องกันข้อความแนะนำซ้ำซ้อน
 function showIntroMessages() {
@@ -126,13 +144,17 @@ async function fetchData(action, params = {}, method = 'GET') {
     }
 }
 
+// ======= แก้ไข updateUIForLoginStatus เพื่อแสดง streak =========
 function updateUIForLoginStatus(isLoggedIn, username = '') {
     if (isLoggedIn) {
         loginBtn.style.display = 'none';
         registerBtn.style.display = 'none';
         logoutBtn.style.display = 'inline-block';
         userInfo.style.display = 'inline-block';
-        loggedInUserSpan.innerText = `ยินดีต้อนรับ, ${username}! (คะแนน: ${currentUserScore})`;
+        // ดึง streak จาก localStorage ถ้ามี
+        const streak = localStorage.getItem('streak') || 0;
+        const chattedToday = localStorage.getItem('chattedToday') === '1';
+        showStreakUI(streak, chattedToday);
         chatbotSection.style.display = 'block';
     } else {
         loginBtn.style.display = 'inline-block';
@@ -143,6 +165,7 @@ function updateUIForLoginStatus(isLoggedIn, username = '') {
         chatbotSection.style.display = 'none';
     }
 }
+// ======= จบแก้ไข updateUIForLoginStatus =========
 
 async function updateRankingTable() {
     rankingTableBody.innerHTML = '';
@@ -182,6 +205,9 @@ async function sendMessage() {
         chatInput.value = '';
         return;
     }
+
+    // ===== เรียกอัปเดต streak ก่อนแสดงข้อความผู้ใช้ =====
+    await updateAndShowStreak();
 
     appendMessage('user', message);
     chatInput.value = '';
@@ -276,7 +302,10 @@ async function checkQuizAnswer(answer) {
     if (updateResult.success) {
         currentUserScore = updateResult.newScore;
         quizAttemptsToday++;
-        loggedInUserSpan.innerText = `ยินดีต้อนรับ, ${currentUser}! (คะแนน: ${currentUserScore})`;
+        // อัปเดต streak UI ด้วยคะแนนใหม่
+        const streak = localStorage.getItem('streak') || 0;
+        const chattedToday = localStorage.getItem('chattedToday') === '1';
+        showStreakUI(streak, chattedToday);
         appendMessage('bot', `ตอนนี้คุณมี ${currentUserScore} แต้มแล้ว (ตอบไปแล้ว ${quizAttemptsToday} ครั้ง / ${QUIZ_ATTEMPTS_PER_DAY} ครั้งต่อวัน)`);
     } else {
         appendMessage('bot', `เกิดข้อผิดพลาดในการอัปเดตคะแนน: ${updateResult.message}`);
@@ -366,6 +395,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         localStorage.setItem('currentUserScore', currentUserScore);
                         localStorage.setItem('quizAttemptsToday', quizAttemptsToday);
 
+                        // หลังล็อกอิน อัปเดต streak UI
+                        await updateAndShowStreak();
+
                         updateUIForLoginStatus(true, currentUser);
 
                         setTimeout(() => {
@@ -400,6 +432,10 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('currentUser');
         localStorage.removeItem('currentUserScore');
         localStorage.removeItem('quizAttemptsToday');
+        // รีเซ็ต streak ด้วย
+        localStorage.removeItem('streak');
+        localStorage.removeItem('highestStreak');
+        localStorage.removeItem('chattedToday');
         updateUIForLoginStatus(false);
         if (chatbox) chatbox.innerHTML = '';
         showIntroMessages();
