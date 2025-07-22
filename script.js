@@ -334,7 +334,7 @@ function closeModal() {
 }
 
 // --- Event Listeners ---
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // โหลดสถานะผู้ใช้จาก Local Storage (ถ้ามี)
     const storedUser = localStorage.getItem('currentUser');
     const storedScore = localStorage.getItem('currentUserScore');
@@ -344,6 +344,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentUser = storedUser;
         currentUserScore = parseInt(storedScore) || 0;
         quizAttemptsToday = parseInt(storedQuizAttempts) || 0;
+        // อัปเดต streak เมื่อโหลด/รีเฟรช
+        await updateAndShowStreak();
         updateUIForLoginStatus(true, currentUser);
         showIntroMessages();
     } else {
@@ -395,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         localStorage.setItem('currentUserScore', currentUserScore);
                         localStorage.setItem('quizAttemptsToday', quizAttemptsToday);
 
-                        // หลังล็อกอิน อัปเดต streak UI
+                        // เรียก streak หลัง login สำเร็จ
                         await updateAndShowStreak();
 
                         updateUIForLoginStatus(true, currentUser);
