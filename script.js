@@ -51,15 +51,17 @@ async function updateAndShowStreak() {
         localStorage.setItem('streak', res.streak);
         localStorage.setItem('highestStreak', res.highestStreak);
         localStorage.setItem('chattedToday', res.chattedToday ? '1' : '0');
-        showStreakUI(res.streak, res.chattedToday);
+        showStreakUI(res.streak, res.highestStreak, res.chattedToday);
     }
 }
 
 // แสดงผล streak หลังชื่อผู้ใช้
-function showStreakUI(streak, chattedToday) {
+function showStreakUI(streak, highestStreak, chattedToday) {
     if (!loggedInUserSpan) return;
+    streak = parseInt(streak) || 0;
+    highestStreak = parseInt(highestStreak) || 0;
     let streakIcon = chattedToday ? '💧' : '<span style="filter: grayscale(1);opacity:0.4;">💧</span>';
-    loggedInUserSpan.innerHTML = `ยินดีต้อนรับ, ${currentUser}! (คะแนน: ${currentUserScore}) ${streakIcon}${streak}`;
+    loggedInUserSpan.innerHTML = `ยินดีต้อนรับ, ${currentUser}! (คะแนน: ${currentUserScore}) ${streakIcon}${streak} <span title="Streak สูงสุด">🔥${highestStreak}</span>`;
 }
 // ========== จบ Streak Feature ==========
 
@@ -69,7 +71,7 @@ function appendMessage(sender, text) {
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message', sender);
 
-    // ถ้าเป็น bot และมี tag HTML (มี "<a" หรือ "<ul" หรือ "<ol") ให้ render เป็น HTML
+    // ถ้าเป็น bot และมี tag HTML ให้ render เป็น HTML
     if (
         sender === 'bot' && (
             text.includes('<a') || text.includes('<ul') || text.includes('<ol') || text.includes('<b') || text.includes('<br')
@@ -89,7 +91,6 @@ function appendMessage(sender, text) {
 
 // ป้องกันข้อความแนะนำซ้ำซ้อน
 function showIntroMessages() {
-    // ลบข้อความแนะนำเดิมที่ซ้ำ (ถ้ามี)
     if (chatbox) {
         let toRemove = [];
         chatbox.querySelectorAll('.message.bot').forEach(div => {
@@ -144,7 +145,7 @@ async function fetchData(action, params = {}, method = 'GET') {
     }
 }
 
-// ======= แก้ไข updateUIForLoginStatus เพื่อแสดง streak =========
+// ======= updateUIForLoginStatus เพื่อแสดง streak =========
 function updateUIForLoginStatus(isLoggedIn, username = '') {
     if (isLoggedIn) {
         loginBtn.style.display = 'none';
@@ -153,8 +154,9 @@ function updateUIForLoginStatus(isLoggedIn, username = '') {
         userInfo.style.display = 'inline-block';
         // ดึง streak จาก localStorage ถ้ามี
         const streak = localStorage.getItem('streak') || 0;
+        const highestStreak = localStorage.getItem('highestStreak') || 0;
         const chattedToday = localStorage.getItem('chattedToday') === '1';
-        showStreakUI(streak, chattedToday);
+        showStreakUI(streak, highestStreak, chattedToday);
         chatbotSection.style.display = 'block';
     } else {
         loginBtn.style.display = 'inline-block';
@@ -165,7 +167,7 @@ function updateUIForLoginStatus(isLoggedIn, username = '') {
         chatbotSection.style.display = 'none';
     }
 }
-// ======= จบแก้ไข updateUIForLoginStatus =========
+// ======= จบ updateUIForLoginStatus =========
 
 async function updateRankingTable() {
     rankingTableBody.innerHTML = '';
@@ -215,11 +217,13 @@ async function sendMessage() {
     // Quiz command
     if (message.toLowerCase() === 'เล่นเกม') {
         await startQuiz();
+        await updateAndShowStreak(); // refresh streak หลังเล่นเกม
         return;
     }
     // Quiz answer
     if (currentQuizQuestion) {
         await checkQuizAnswer(message);
+        await updateAndShowStreak(); // refresh streak หลังตอบ quiz
         return;
     }
 
@@ -242,6 +246,7 @@ async function sendMessage() {
 
         if (result.success) {
             appendMessage('bot', result.message);
+            await updateAndShowStreak(); // refresh streak หลังบอทตอบ
         } else {
             appendMessage('bot', `บอทตอบกลับผิดพลาด: ${result.message}`);
         }
@@ -304,8 +309,9 @@ async function checkQuizAnswer(answer) {
         quizAttemptsToday++;
         // อัปเดต streak UI ด้วยคะแนนใหม่
         const streak = localStorage.getItem('streak') || 0;
+        const highestStreak = localStorage.getItem('highestStreak') || 0;
         const chattedToday = localStorage.getItem('chattedToday') === '1';
-        showStreakUI(streak, chattedToday);
+        showStreakUI(streak, highestStreak, chattedToday);
         appendMessage('bot', `ตอนนี้คุณมี ${currentUserScore} แต้มแล้ว (ตอบไปแล้ว ${quizAttemptsToday} ครั้ง / ${QUIZ_ATTEMPTS_PER_DAY} ครั้งต่อวัน)`);
     } else {
         appendMessage('bot', `เกิดข้อผิดพลาดในการอัปเดตคะแนน: ${updateResult.message}`);
