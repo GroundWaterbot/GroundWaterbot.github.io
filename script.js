@@ -43,13 +43,11 @@ let quizAttemptsToday = 0;
 let currentQuizQuestion = null;
 
 // ========== Streak Feature ==========
+// เรียก updateStreakOnChat เฉพาะเวลาส่งแชท ไม่ต้องเรียกหลัง login/reload/quiz
 async function updateAndShowStreak() {
-    console.log('=== updateAndShowStreak CALLED! Username:', currentUser);
     if (!currentUser || currentUser === "undefined") {
-        console.log("updateAndShowStreak: currentUser ไม่มีค่า", currentUser);
         return;
     }
-    console.log("Calling updateAndShowStreak with currentUser:", currentUser);
     const res = await fetchData('updateStreakOnChat', { username: currentUser }, 'POST');
     if (res.success) {
         localStorage.setItem('streak', res.streak);
@@ -64,9 +62,8 @@ function showStreakUI(streak, highestStreak, chattedToday) {
     if (!loggedInUserSpan) return;
     streak = parseInt(streak) || 0;
     highestStreak = parseInt(highestStreak) || 0;
-    // ใช้ emoji 💧 หรือจะเปลี่ยนเป็นรูปภาพก็ได้
-let streakIcon = chattedToday ? '<span style="color:#0099ff;">💧</span>' : '<span style="color:#b2bec3;">💧</span>';
-loggedInUserSpan.innerHTML = `ยินดีต้อนรับ, ${currentUser}! (คะแนน: ${currentUserScore}) ${streakIcon}${streak}`;
+    let streakIcon = chattedToday ? '<span style="color:#0099ff;">💧</span>' : '<span style="color:#b2bec3;">💧</span>';
+    loggedInUserSpan.innerHTML = `ยินดีต้อนรับ, ${currentUser}! (คะแนน: ${currentUserScore}) ${streakIcon}${streak}`;
 }
 // ========== จบ Streak Feature ==========
 
@@ -121,7 +118,6 @@ function showIntroMessages() {
 }
 
 async function fetchData(action, params = {}, method = 'GET') {
-    console.log('[fetchData] action=', action, 'params=', params, 'method=', method);
     const url = new URL(APPS_SCRIPT_WEB_APP_URL);
     let body = null;
     if (method === 'GET') {
@@ -138,17 +134,14 @@ async function fetchData(action, params = {}, method = 'GET') {
             fetchOptions.headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
             fetchOptions.body = body;
         }
-        console.log('[fetchData] URL:', url.toString(), 'Options:', fetchOptions);
         const response = await fetch(url.toString(), fetchOptions);
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
         }
         const json = await response.json();
-        console.log('[fetchData] Response:', json);
         return json;
     } catch (error) {
-        console.error('Error fetching data:', error);
         const errorMessage = error.message.includes('Server error:') ? error.message : 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์';
         return { success: false, message: errorMessage };
     }
@@ -207,6 +200,7 @@ async function updateRankingTable() {
 }
 
 // --- Chat Functions ---
+// เรียก updateAndShowStreak เฉพาะเวลาส่งแชท (และครั้งแรกของแต่ละวันเท่านั้น)
 async function sendMessage() {
     const message = chatInput.value.trim();
     if (!message) return;
@@ -217,7 +211,7 @@ async function sendMessage() {
         return;
     }
 
-    // ===== เรียกอัปเดต streak ก่อนแสดงข้อความผู้ใช้ =====
+    // เรียก update streak ที่นี่เท่านั้น
     await updateAndShowStreak();
 
     appendMessage('user', message);
@@ -226,13 +220,13 @@ async function sendMessage() {
     // Quiz command
     if (message.toLowerCase() === 'เล่นเกม') {
         await startQuiz();
-        await updateAndShowStreak(); // refresh streak หลังเล่นเกม
+        // ไม่ต้อง update streak ซ้ำ!
         return;
     }
     // Quiz answer
     if (currentQuizQuestion) {
         await checkQuizAnswer(message);
-        await updateAndShowStreak(); // refresh streak หลังตอบ quiz
+        // ไม่ต้อง update streak ซ้ำ!
         return;
     }
 
@@ -255,7 +249,7 @@ async function sendMessage() {
 
         if (result.success) {
             appendMessage('bot', result.message);
-            await updateAndShowStreak(); // refresh streak หลังบอทตอบ
+            // ไม่ต้อง update streak ซ้ำ!
         } else {
             appendMessage('bot', `บอทตอบกลับผิดพลาด: ${result.message}`);
         }
@@ -359,9 +353,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         currentUser = storedUser;
         currentUserScore = parseInt(storedScore) || 0;
         quizAttemptsToday = parseInt(storedQuizAttempts) || 0;
-        console.log('DOMContentLoaded: currentUser loaded from localStorage:', currentUser);
-        // อัปเดต streak เมื่อโหลด/รีเฟรช
-        await updateAndShowStreak();
+        // ไม่ต้อง fetch updateAndShowStreak ตอนโหลด (แสดงจาก localStorage เท่านั้น)
         updateUIForLoginStatus(true, currentUser);
         showIntroMessages();
     } else {
@@ -413,11 +405,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         localStorage.setItem('currentUserScore', currentUserScore);
                         localStorage.setItem('quizAttemptsToday', quizAttemptsToday);
 
-                        console.log('login: currentUser set to', currentUser);
-
-                        // เรียก streak หลัง login สำเร็จ
-                        await updateAndShowStreak();
-
+                        // ไม่ต้องเรียก updateAndShowStreak ที่นี่
                         updateUIForLoginStatus(true, currentUser);
 
                         setTimeout(() => {
