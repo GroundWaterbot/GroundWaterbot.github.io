@@ -119,6 +119,7 @@ function showIntroMessages() {
 }
 
 async function fetchData(action, params = {}, method = 'GET') {
+    console.log('[fetchData] action:', action, 'params:', params, 'method:', method);
     const url = new URL(APPS_SCRIPT_WEB_APP_URL);
     let body = null;
     if (method === 'GET') {
@@ -135,12 +136,15 @@ async function fetchData(action, params = {}, method = 'GET') {
             fetchOptions.headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
             fetchOptions.body = body;
         }
+        console.log('[fetchData] URL:', url.toString(), 'Options:', fetchOptions);
         const response = await fetch(url.toString(), fetchOptions);
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
         }
-        return await response.json();
+        const json = await response.json();
+        console.log('[fetchData] Response:', json);
+        return json;
     } catch (error) {
         console.error('Error fetching data:', error);
         const errorMessage = error.message.includes('Server error:') ? error.message : 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์';
