@@ -44,6 +44,7 @@ let currentQuizQuestion = null;
 
 // ========== Streak Feature ==========
 async function updateAndShowStreak() {
+    console.log('=== updateAndShowStreak CALLED! Username:', currentUser);
     if (!currentUser || currentUser === "undefined") {
         console.log("updateAndShowStreak: currentUser ไม่มีค่า", currentUser);
         return;
@@ -119,7 +120,7 @@ function showIntroMessages() {
 }
 
 async function fetchData(action, params = {}, method = 'GET') {
-    console.log('[fetchData] action:', action, 'params:', params, 'method:', method);
+    console.log('[fetchData] action=', action, 'params=', params, 'method=', method);
     const url = new URL(APPS_SCRIPT_WEB_APP_URL);
     let body = null;
     if (method === 'GET') {
