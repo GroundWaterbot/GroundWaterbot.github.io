@@ -64,8 +64,9 @@ function showStreakUI(streak, highestStreak, chattedToday) {
     if (!loggedInUserSpan) return;
     streak = parseInt(streak) || 0;
     highestStreak = parseInt(highestStreak) || 0;
-    let streakIcon = chattedToday ? '💧' : '<span style="filter: grayscale(1);opacity:0.4;">💧</span>';
-    loggedInUserSpan.innerHTML = `ยินดีต้อนรับ, ${currentUser}! (คะแนน: ${currentUserScore}) ${streakIcon}${streak} <span title="Streak สูงสุด">🔥${highestStreak}</span>`;
+    // ใช้ emoji 💧 หรือจะเปลี่ยนเป็นรูปภาพก็ได้
+let streakIcon = chattedToday ? '<span style="color:#0099ff;">💧</span>' : '<span style="color:#b2bec3;">💧</span>';
+loggedInUserSpan.innerHTML = `ยินดีต้อนรับ, ${currentUser}! (คะแนน: ${currentUserScore}) ${streakIcon}${streak}`;
 }
 // ========== จบ Streak Feature ==========
 
