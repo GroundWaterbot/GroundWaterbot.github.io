@@ -9,7 +9,7 @@ async function hashPassword(password) {
 }
 // ---- จบฟังก์ชัน hashPassword ----
 
-const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzlryWE0EtVvv8-BhqRZ-KLdoLZ3nZ80d_M6Kt5T2VQXo2UTP54sHEL7iSp4BhYLkI/exec';
+const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwbBbO_y-Jo_ZnTsDqO-daxb2if-raQiDGcG53I0_Besfvt9QzYngcVac05hU7LD5U/exec';
 const QUIZ_ATTEMPTS_PER_DAY = 3;
 
 // --- DOM Elements ---
