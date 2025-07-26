@@ -202,18 +202,24 @@ async function updateRankingTable() {
 // --- Chat Functions ---
 // เรียก updateAndShowStreak เฉพาะเวลาส่งแชท (และครั้งแรกของแต่ละวันเท่านั้น)
 async function sendMessage() {
-    // --- ป้องกันกดส่งซ้ำ ---
     if (sendBtn.disabled) return;
 
     const message = chatInput.value.trim();
     if (!message) return;
 
-    sendBtn.disabled = true; // Disable ปุ่มทันทีที่เริ่มส่ง
+    // ซ่อนปุ่มส่งทันทีที่เริ่มส่ง
+    sendBtn.style.display = "none";
+
+    // แสดง <span> ส่งข้อความ... ระหว่างรอ
+    let sendingSpan = document.createElement('span');
+    sendingSpan.id = 'sending-indicator';
+    sendingSpan.innerText = 'กำลังส่ง...';
+    sendBtn.parentNode.insertBefore(sendingSpan, sendBtn);
 
     if (!currentUser) {
         appendMessage('bot', 'กรุณาเข้าสู่ระบบก่อนใช้งาน');
         chatInput.value = '';
-        sendBtn.disabled = false;
+        restoreSendButton();
         return;
     }
 
@@ -225,13 +231,13 @@ async function sendMessage() {
     // Quiz command
     if (message.toLowerCase() === 'เล่นเกม') {
         await startQuiz();
-        sendBtn.disabled = false;
+        restoreSendButton();
         return;
     }
     // Quiz answer
     if (currentQuizQuestion) {
         await checkQuizAnswer(message);
-        sendBtn.disabled = false;
+        restoreSendButton();
         return;
     }
 
@@ -261,9 +267,16 @@ async function sendMessage() {
         if (thinkingMessageDiv.parentNode) thinkingMessageDiv.remove();
         appendMessage('bot', "เกิดข้อผิดพลาดในการเชื่อมต่อกับบอท");
     }
-    sendBtn.disabled = false; // Enable ปุ่มกลับหลังส่งเสร็จ
+    restoreSendButton();
 }
 
+// ฟังก์ชันคืนปุ่มส่งกลับมา
+function restoreSendButton() {
+    sendBtn.style.display = "inline-block";
+    let sendingSpan = document.getElementById('sending-indicator');
+    if (sendingSpan) sendingSpan.remove();
+    sendBtn.disabled = false;
+}
 async function startQuiz() {
     if (!currentUser) {
         appendMessage('bot', 'กรุณาเข้าสู่ระบบก่อนเล่นเกม');
