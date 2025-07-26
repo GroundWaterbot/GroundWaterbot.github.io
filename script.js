@@ -9,7 +9,7 @@ async function hashPassword(password) {
 }
 // ---- จบฟังก์ชัน hashPassword ----
 
-const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwHC_ttikKzdLv6ZeykwccgUbPkUMPekAT1ErNXO6W7rdRXIQz6osl1_C4ZVfjkWE8/exec';
+const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyqJu1cBTUQWiq5suvvYTsevuvAzuSmOkRrK4uGM3OEQwX9DK1VFjsV8muhLiBqkxc/exec';
 const QUIZ_ATTEMPTS_PER_DAY = 3;
 
 // --- DOM Elements ---
@@ -202,16 +202,21 @@ async function updateRankingTable() {
 // --- Chat Functions ---
 // เรียก updateAndShowStreak เฉพาะเวลาส่งแชท (และครั้งแรกของแต่ละวันเท่านั้น)
 async function sendMessage() {
+    // --- ป้องกันกดส่งซ้ำ ---
+    if (sendBtn.disabled) return;
+
     const message = chatInput.value.trim();
     if (!message) return;
+
+    sendBtn.disabled = true; // Disable ปุ่มทันทีที่เริ่มส่ง
 
     if (!currentUser) {
         appendMessage('bot', 'กรุณาเข้าสู่ระบบก่อนใช้งาน');
         chatInput.value = '';
+        sendBtn.disabled = false;
         return;
     }
 
-    // เรียก update streak ที่นี่เท่านั้น
     await updateAndShowStreak();
 
     appendMessage('user', message);
@@ -220,13 +225,13 @@ async function sendMessage() {
     // Quiz command
     if (message.toLowerCase() === 'เล่นเกม') {
         await startQuiz();
-        // ไม่ต้อง update streak ซ้ำ!
+        sendBtn.disabled = false;
         return;
     }
     // Quiz answer
     if (currentQuizQuestion) {
         await checkQuizAnswer(message);
-        // ไม่ต้อง update streak ซ้ำ!
+        sendBtn.disabled = false;
         return;
     }
 
@@ -249,7 +254,6 @@ async function sendMessage() {
 
         if (result.success) {
             appendMessage('bot', result.message);
-            // ไม่ต้อง update streak ซ้ำ!
         } else {
             appendMessage('bot', `บอทตอบกลับผิดพลาด: ${result.message}`);
         }
@@ -257,6 +261,7 @@ async function sendMessage() {
         if (thinkingMessageDiv.parentNode) thinkingMessageDiv.remove();
         appendMessage('bot', "เกิดข้อผิดพลาดในการเชื่อมต่อกับบอท");
     }
+    sendBtn.disabled = false; // Enable ปุ่มกลับหลังส่งเสร็จ
 }
 
 async function startQuiz() {
